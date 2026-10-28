@@ -856,6 +856,11 @@ def api_eda_summary():
         ]
     })
 
+@app.route('/about')
+def about():
+    """Renders the improved About page."""
+    return render_template('about.html')
+
 # ==================== ERROR VIEWS ====================
 
 @app.errorhandler(404)

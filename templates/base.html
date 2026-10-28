@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduShield: {% block title %}AI Student Retention Platform{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- Plotly.js CDN -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    
+    <!-- Favicon Link -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAALl0lEQVR4nJVXC5QV1ZU9595bVe9Vvff639AIjW0bII0GkY+GgK2JAURQo1aPGoO2i6ETlKgBP1kz4+Plg7/EgLpQzMRoQsTVLwqOhhhDlDYjzSAwUeRjRFD5NND/fp/63N+s6oYEE02cs9ZbtarOu/fss+89+9wL8E9NY2Njmp18e+Tupyvu/vKK5747Y8WbP2xaddbJ7+nGNNOg8dNmSafTJHquuOanw+6bveKlDRs2WNH7pw1A13XJ8eMN2NaWEYMwtCbfmfPI9WpA/xsGMAaVBNPAHsvBh+tmlKxszjT3Rf9zoZW6LoCbdRUC6sGxoLEJmkirdiEz7cBLcZGczUbKK5esW7wuAoBaa2hqypLjx3dhdfV4nc02yZNIHk0/mti7Da+URb1Y+zCZSQqAARBQ3JKWwUABsPDDWII+kai3nl6y+luH/5I1pEnHpBF0EgC07Gjhy6bf/zQtWPO55BqTelum/c6pn8jAO++0mo98r3tKMKAvg1BdpQOsN7QBDAGQhNuSZfCEbZv54pFgviyq2ZamQFCCJmFXzDY3xEuNbO2Mys1NS5p6Ts65/NKHMqqL3FPwvIhRkjQThFXB13Hbtm3GmjV7Kjs6inXC018Ars7TXH0RQj3WxDhQIEBkAAz4jkSJ8Wtm84OE6zMQlGUY9AODMxZ2C1cUwwtsiFMGGiQEAEx2MJO9acRZe7Iy/mdtaeJ1h6OKh4KHuBIiWe68ALYo4Mx5j74gufllDEWCgQUmMYFGkJUPKINjMYO0JxzSxuJqQPn+KCppB9exNU+81FK8fe6Kq5ghJ5qMdRiBAWE/nyKKwQxDkjPiGAcGBARwYIxCaHjrDAfbZSd9wENf1V5cU7fwvvkHmcdxsghVwgQEDX5Bq+JexzR2OTZ7x0xYvUpwO/CDpAj00c8nxv/ojjWzCitXrrTmJtOVP1l723ME4Lmll/5kljL9SdYIc1cJK9kq+0VMDMgzi4E3UQby9FhoV6FNCpKrz2O0XAyP2THSh4gap13yWJcWRrnD+O9GjYw/HEqs0aEXR02IDHkv+PD2sy/e/HZEyrQrFtcfPeY157zgWqV1KhEz1qeS1s92bnx8S+R/0H2irqD88y1qVpoWNQ0Ked4nU/4hcT8boe7xuvxLTM+ZxuP+xvTmJV91waWMKzAoNREY392d6xvH0NlHBb6VzS78aLAeEWDsBd+8LF/0/nXv/p6vSm1YSqqotCBUakHOLy44bUrz5lSM/vKlqj+taVu1am007qGvra7JS14bDARprRENZuwPfTmWoQIaw0HADY0NyDRBQ2gNgdJIA1n8L/bKBshm5aSZt4zrK/rX5Qth0/E+b6xUGrRSgDoQjCACYqCBS8G1MyDJtEKop3W1F5bVfbF5fUky9otVO9dt37fv5Y67vnT/ITChM0ntlAGxipCEkCyz/xABGF89XjOOmiPSuGGbjm0Ja1FqUXz7nLKZBzuLjxU4rVY8EopAESRaARLDJCyViHtCiIOUkeMmIZ1Sq4GBohjvB3JKqGhLMfRaRtaNzrQub/3+lpUfjrIc9kq+z5tKwAJuFPdXzo1tgecAmrJNimiDeJwAeKGMkZgpP8zvLdnym9XrTq+puKAiSbK2BW9SyogeWg3JuRTHevNmTy4Y29nrzejoyc/pK8gZNeXmpvKU2VYSx4fqRpZ9Ye604cub/qVJaoYVYNI/5vvCCyINIzbd0Nzc7EfSHYkkA4I9QuKwELFMgSaBVilEPDxp9mJhoug++PaaplHn3/RgT79cqkETJASMSGG1BgQS6WwsFFjf3c8nHNr684sRUUSbZ8sLAN+dt2JYGMJhK85KBcTrAxrIqhp77Un6oyfRiB0KEUKN1QppKDWURQ4ug0o/lOdzoUDxYIBRfTRpk3urU/SbpTG40mbhFVUpozllYzpu6LeQUBYFB5htLVy42ojmyEucyEqNTd3HvDkSGIREdjRcN2p75IvoHwTATLJfEg1cQQ0wShNObHTk8LnJQoVOOp1mBjF2lDhkR3WZsytm0bdGDyvdd87YM/YnU9bOylJnZ2nC2GNQeHWo4yVFTc0RGXXRWDnGuKcE52x6CAI0JR2Xzp0TnGiCgwwwK0bfUr4ErmEEMa0klaEz1CbFcIJIdh+C1HvtT/6mcc7S7Z1+cbpWeF73QCHZkw9QE/C1hAMT6su/nf35vZ2ZzUO6n8kArE5Psumw6n3tzxy5h4BBGKEAVO3SarB108yJLsuqK5w3j/bnhGA26+wPSh0TOl231WxtdZ8HgHWIGA0hbRsyRwHg13/buGrPcRs29Xo3nza5OWmx4Kn9W57Z6TakzZbMZcWbZq34CoAzkUMhMJlhSRO3/u148qOWCX+ijBwQ1ILOPIyLOwYVdercQZmM1Hkop2i9EFyXAkS/QWMRMIHm1ySYaU+w74S+PDtyZHdn+CL30TO5Z/4gFKEUgEaAXCWqnT8Ojrww6uEnAIwdMyZwHPoGB4iq/SLDMoNCUU6OnI2Ny04GGzpXZLMynW7AhXetLvnG3ctLFi8uNzRgv+K+UMLnhLIwApVOp42uLvkrrkhCUKmQmkRSuWf5L1N7okQymcxfAWgAGFEZW0tpiB7aJfuP8krHMU5z063D29qWSdAaobGRQYNrRpM/u/GD6S/8vv39VzYeePfFrTvmEyIHkGBUAUwoxSK2dm2p+hlX9lRPBkpElWvEgDlGK2KTbGxMn5oUROc0/O2DV7/mmOK9QIPq9cQNpkkOdHbzKyMNTC8DhLY2AbuzYTR5ECor4KrCD2VFwIWDoLkGAkgZWkn/fffy1ctCmbxeUh4aNvGFJiQE36sebj09yP4p9A+uY2PjaxQR+ZcWPfvj/lA/nlN27d6D/sjRlZS5/75+7KZNFx6unXrjwxwYidOwDTT+GVFpjKiJ+gFaSUpRVaS8G8eXX3p1rmDcKUXOqy7DdV4/m8dMiygzv/aHTy740HVbaSbz1+PeIANtbRfJiNr/vu3cp0rMcE+olO7y8PaUY3wwUPAXGBUTagqebPZCekPOkzPjphmCRqUBiRC03KH9u0+vNlrqkxdP782zO7ny/fIq2dI3oOq5MpOSBfmKUfb3Il1oaNh1YlN/fAm0645HHDMm+Nxp9i22oTAX6MQb7/kt5aX268XUuIzSolvpMCCM9gnNDc3iFFDkSh3/nYkTb8CYMfX27gAWKqKhrFwtyBXYuRzs8yTVwOIqs2ow+yw5dfOdCgCiU3BEz8v3X/XqyBK1wrRM6AvZudsPFOePGxnbCGbMUsS0JOcp8Hq6S2PBU5POPqu5qnbe5e8e7Hs9z0kDmAwSKe/WYqhH+NK+LaphYN6rrS8u+nE0d/aE9H4igMiyWVdpt5VuffzrSytt8bvoW1deX/0/x5NfmVDvXFMSw99XVla9MeHC60ZVj5kljuSrn+zMy2ZPakADoKKM3xQIonuK5gO+EKANfqD2rJJrIxwnqP87+iP7+LE8KjlE+M/16xMPPJ9/9XiBTkZAGFZCNmdvn3jNosd23HI4l7yT5wcAgwJYhgMxDPaNH62XHOmQ04t58w6UHGJUHB9eJi/K/upbu13Xpdls9mMb7xMZGDREnU6nccEVV+Rum1U6szoJryNF6OgJp827b+v20hR9v8LM3Uop76IWg1InXHlWHVvw7iFY1FMw7wiUAGbBR8Or2cVDwVv/YfDBkJ/0Mepq0YbRB16LTfjBkSeP5tm1figgRrUeUWb+dEJt/PV8zvd6c/ycjzr4YpCs1Ij6IPXbzxzuXfvMqlsGS+7UG9b/C8CpIKLb0JSbs98+1CvvzYVoE2AQh3yfAdDDVewMEBIcIqDUkiuXzR+4a86cW4PPGjyyTwUwZNFtdxlGCrjwvnVnv7EvuLd7QF4SSEKiLRUnACWW3jq6XP7Hy49845VTgX+W4J/dTlzPDQSYtfT5y8fcuPZ/669/5mDjza2LtdZDV3e3NdL4f5LQ39v/AbwQrQjB2lKZAAAAAElFTkSuQmCC">
+
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=6">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- Sticky Frosted Top Navigation Bar -->
+        <nav class="navbar-top">
+            <div class="nav-container">
+                <!-- Logo -->
+                <a href="{% if current_user.is_authenticated %}{{ url_for('dashboard') }}{% else %}{{ url_for('home') }}{% endif %}" class="nav-brand" style="text-decoration: none; display: flex; align-items: center;">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="EduShield Logo" style="height: 56px; width: auto; margin-right: 0.5rem; filter: drop-shadow(0 2px 4px rgba(37,99,235,0.15));">
+                    <span class="nav-brand-text">Edu<span>Shield</span></span>
+                </a>
+                
+                <!-- Menu Toggle (Mobile) -->
+                <button class="nav-toggle" id="nav-toggle-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <!-- Navigation Menu Links -->
+                <ul class="nav-menu" id="nav-menu-list">
+                    {% if current_user.is_authenticated %}
+                    <li>
+                        <a href="{{ url_for('dashboard') }}" class="nav-link {{ is_active('/dashboard') }}">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('predict') }}" class="nav-link {{ is_active('/prediction') }}">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Risk Prediction</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('history') }}" class="nav-link {{ is_active('/history') }}">
+                            <i class="fa-solid fa-history"></i>
+                            <span>Prediction History</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('dataset') }}" class="nav-link {{ is_active('/dataset') }}">
+                            <i class="fa-solid fa-database"></i>
+                            <span>Dataset Overview</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('eda') }}" class="nav-link {{ is_active('/eda') }}">
+                            <i class="fa-solid fa-chart-pie"></i>
+                            <span>EDA Page</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('feature_importance') }}" class="nav-link {{ is_active('/feature-importance') }}">
+                            <i class="fa-solid fa-brain"></i>
+                            <span>Feature Importance</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('workflow') }}" class="nav-link {{ is_active('/workflow') }}">
+                            <i class="fa-solid fa-route"></i>
+                            <span>ML Workflow</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('model_performance') }}" class="nav-link {{ is_active('/model-performance') }}">
+                            <i class="fa-solid fa-code-compare"></i>
+                            <span>Model Performance</span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href="{{ url_for('home') }}" class="nav-link {{ is_active('/') }}">
+                            <i class="fa-solid fa-house"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('login') }}" class="nav-link {{ is_active('/login') }}">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                            <span>Login</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('register') }}" class="nav-link {{ is_active('/register') }}">
+                            <i class="fa-solid fa-user-plus"></i>
+                            <span>Register</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a href="{{ url_for('about') }}" class="nav-link {{ is_active('/about') }}">
+                            <i class="fa-solid fa-circle-info"></i>
+                            <span>About</span>
+                        </a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li>
+                        <a href="{{ url_for('logout') }}" class="nav-link text-danger">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+                
+                <!-- Action Tools & User Profile -->
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Light/Dark Mode Switcher -->
+                    <button id="theme-toggle-btn" class="btn btn-link text-muted p-0" style="text-decoration: none;">
+                        <i id="theme-toggle-icon" class="fas fa-moon" style="font-size: 1.2rem;"></i>
+                    </button>
+                    
+                    {% if current_user.is_authenticated %}
+                    <div class="nav-user d-none d-md-flex">
+                        <div class="avatar-placeholder">{{ current_user.username[0]|upper }}</div>
+                        <div class="user-info">
+                            <span class="user-name">{{ current_user.username }}</span>
+                            <span class="user-role">{{ current_user.role|upper }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            {% block page_header %}
+            <!-- Page Header Hero Section -->
+            <header class="page-header">
+                <div class="container">
+                    <div class="header-badge">Institutional Intelligence</div>
+                    <h1>{% block header_title %}Analytics Dashboard{% endblock %}</h1>
+                    <p>{% block header_description %}Monitor institutional KPIs, key dropout factors, and overall student status.{% endblock %}</p>
+                </div>
+            </header>
+            {% endblock %}
+            
+            <!-- Flash Message Alerts -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <div class="container mt-4">
+                  {% for category, message in messages %}
+                    <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show shadow-sm border-0" role="alert" style="border-radius: var(--radius-md);">
+                      <i class="fas {% if category == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %} me-2"></i>
+                      {{ message }}
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+            
+            <!-- Page Body Content Wrapper -->
+            <section class="page-body">
+                <div class="container">
+                    {% block content %}{% endblock %}
+                </div>
+            </section>
+            
+        </main>
+        
+    </div>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom Main JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}?v=3"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

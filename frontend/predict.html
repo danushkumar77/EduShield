@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk Assessment - EduShield</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+<body>
+    <div id="navbar-mount"></div>
+
+    <div class="container py-4">
+        <!-- Header -->
+        <div class="row g-4 mb-4">
+            <div class="col-12">
+                <div class="glass-card p-4 border-start border-5 border-primary shadow-sm d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                    <div>
+                        <h3 class="fw-bold font-outfit mb-1">Student Retention Risk Assessment</h3>
+                        <p class="text-muted small mb-0">Compute real-time dropout probability via XGBoost & store records in MongoDB Atlas</p>
+                    </div>
+                    <!-- Quick Preset Profiles -->
+                    <div class="mt-3 mt-md-0 d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-danger rounded-pill px-3" type="button" onclick="loadPreset('high')">
+                            <i class="fas fa-triangle-exclamation me-1"></i>Preset: High Risk
+                        </button>
+                        <button class="btn btn-sm btn-outline-success rounded-pill px-3" type="button" onclick="loadPreset('low')">
+                            <i class="fas fa-circle-check me-1"></i>Preset: Low Risk
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Left Form Column -->
+            <div class="col-12 col-xl-8">
+                <div class="glass-card p-4 shadow-sm">
+                    <form id="predictionForm">
+                        <!-- Student ID & Name -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label for="student_name" class="form-label fw-bold small text-muted"><i class="fas fa-user me-1"></i> Student Name</label>
+                                <input type="text" id="student_name" class="form-control" placeholder="e.g. Alice Jenkins" value="Alice Jenkins">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="student_id" class="form-label fw-bold small text-muted"><i class="fas fa-id-card me-1"></i> Student ID</label>
+                                <input type="text" id="student_id" class="form-control" placeholder="e.g. STU-2026-09" value="STU-2026-09">
+                            </div>
+                        </div>
+
+                        <!-- 1. Demographics -->
+                        <h6 class="fw-bold text-primary border-bottom pb-2 mb-3"><i class="fas fa-user-circle me-1"></i> Demographic Background</h6>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-3">
+                                <label class="form-label small">Gender</label>
+                                <select id="gender" class="form-select">
+                                    <option value="0">Female</option>
+                                    <option value="1" selected>Male</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small">Age at Entry</label>
+                                <input type="number" id="age" class="form-control" value="20" min="15" max="80">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small">Marital Status</label>
+                                <select id="marital" class="form-select">
+                                    <option value="1" selected>Single</option>
+                                    <option value="2">Married</option>
+                                    <option value="4">Divorced</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small">Nationality</label>
+                                <select id="nationality" class="form-select">
+                                    <option value="1" selected>Portuguese / Domestic</option>
+                                    <option value="14">International</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 2. Socioeconomic Status -->
+                        <h6 class="fw-bold text-accent border-bottom pb-2 mb-3"><i class="fas fa-wallet me-1"></i> Socioeconomic & Financial Factors</h6>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <label class="form-label small">Scholarship Holder</label>
+                                <select id="scholarship" class="form-select">
+                                    <option value="0" selected>No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small">Debtor (Owes Tuition)</label>
+                                <select id="debtor" class="form-select">
+                                    <option value="0" selected>No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small">Tuition Fees Up to Date</label>
+                                <select id="tuition_ok" class="form-select">
+                                    <option value="1" selected>Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small">Application Mode</label>
+                                <select id="app_mode" class="form-select">
+                                    <option value="17" selected>Standardized National Exam</option>
+                                    <option value="1">1st Phase - General</option>
+                                    <option value="18">Over 23 Years Old</option>
+                                    <option value="43">Transfer / Course Change</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small">Previous Qualification</label>
+                                <select id="prev_qual" class="form-select">
+                                    <option value="1" selected>Secondary Education (12th)</option>
+                                    <option value="3">Higher Education Degree</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 3. Academic Curricular Units -->
+                        <h6 class="fw-bold text-success border-bottom pb-2 mb-3"><i class="fas fa-book-open me-1"></i> Academic Progress & Credits</h6>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <label class="form-label small">Course Program</label>
+                                <select id="course" class="form-select">
+                                    <option value="9500" selected>Nursing</option>
+                                    <option value="9147">Management</option>
+                                    <option value="9119">Informatics Engineering</option>
+                                    <option value="9238">Social Service</option>
+                                    <option value="9070">Communication Design</option>
+                                    <option value="9254">Tourism</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small">1st Sem Credits Approved</label>
+                                <input type="number" id="sem1_credits" class="form-control" value="6" min="0" max="30">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small">1st Sem Average Grade (0-20)</label>
+                                <input type="number" step="0.1" id="sem1_grade" class="form-control" value="13.5" min="0" max="20">
+                            </div>
+                            <div class="col-md-4 offset-md-4">
+                                <label class="form-label small">2nd Sem Credits Approved</label>
+                                <input type="number" id="sem2_credits" class="form-control" value="6" min="0" max="30">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small">2nd Sem Average Grade (0-20)</label>
+                                <input type="number" step="0.1" id="sem2_grade" class="form-control" value="13.2" min="0" max="20">
+                            </div>
+                        </div>
+
+                        <!-- 4. Macroeconomic Environment -->
+                        <h6 class="fw-bold text-muted border-bottom pb-2 mb-3"><i class="fas fa-chart-line me-1"></i> Economic Context</h6>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <label class="form-label small">Unemployment Rate (%)</label>
+                                <input type="number" step="0.1" id="unemployment" class="form-control" value="10.8">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small">Inflation Rate (%)</label>
+                                <input type="number" step="0.1" id="inflation" class="form-control" value="1.4">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small">GDP Growth (%)</label>
+                                <input type="number" step="0.01" id="gdp" class="form-control" value="1.74">
+                            </div>
+                        </div>
+
+                        <button type="submit" id="submitPredictBtn" class="btn btn-primary w-100 py-3 fw-bold rounded-pill shadow">
+                            <i class="fas fa-brain me-2"></i> Compute Dropout Risk & Recommendations
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Results Column -->
+            <div class="col-12 col-xl-4">
+                <div class="glass-card p-4 shadow-sm h-100 position-sticky" style="top: 90px;" id="resultPanel">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-gauge-high text-primary me-2"></i>Risk Prediction Output</h5>
+                    
+                    <div id="emptyResultPlaceholder" class="text-center py-5 text-muted">
+                        <i class="fas fa-microchip fa-3x mb-3 text-secondary opacity-50"></i>
+                        <h6>Ready for Inference</h6>
+                        <p class="small mb-0">Fill in the student profile and click the button to compute real-time retention probabilities.</p>
+                    </div>
+
+                    <div id="liveResultContainer" class="d-none">
+                        <!-- Risk Badge -->
+                        <div class="text-center mb-3">
+                            <span class="badge px-4 py-2 fs-6 rounded-pill" id="riskBadge">--</span>
+                            <h2 class="fw-bold mt-3 mb-0" id="riskProbabilityText">--%</h2>
+                            <span class="text-muted small">Estimated Dropout Probability</span>
+                        </div>
+
+                        <!-- Confidence Bar -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between small text-muted mb-1">
+                                <span>Model Confidence</span>
+                                <span id="confidenceText">--%</span>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-primary" id="confidenceBar" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Action Recommendations -->
+                        <h6 class="fw-bold text-dark mb-2"><i class="fas fa-list-check text-primary me-1"></i> Recommended Interventions:</h6>
+                        <ul class="list-group list-group-flush small mb-4 rounded border" id="recsList"></ul>
+
+                        <div class="d-grid gap-2">
+                            <a href="#" id="downloadPdfBtn" class="btn btn-outline-danger rounded-pill fw-bold" target="_blank">
+                                <i class="fas fa-file-pdf me-2"></i> Download Official PDF Report
+                            </a>
+                            <a href="history.html" class="btn btn-light border rounded-pill">
+                                <i class="fas fa-history me-2"></i> View in History Log
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/nav.js"></script>
+    <script>
+        function loadPreset(type) {
+            if (type === 'high') {
+                document.getElementById('student_name').value = "Marcus Vance";
+                document.getElementById('student_id').value = "STU-HIGH-2026";
+                document.getElementById('debtor').value = "1";
+                document.getElementById('tuition_ok').value = "0";
+                document.getElementById('scholarship').value = "0";
+                document.getElementById('sem1_credits').value = "1";
+                document.getElementById('sem1_grade').value = "4.0";
+                document.getElementById('sem2_credits').value = "0";
+                document.getElementById('sem2_grade').value = "0.0";
+            } else {
+                document.getElementById('student_name').value = "Elena Rostova";
+                document.getElementById('student_id').value = "STU-LOW-2026";
+                document.getElementById('debtor').value = "0";
+                document.getElementById('tuition_ok').value = "1";
+                document.getElementById('scholarship').value = "1";
+                document.getElementById('sem1_credits').value = "6";
+                document.getElementById('sem1_grade').value = "16.8";
+                document.getElementById('sem2_credits').value = "6";
+                document.getElementById('sem2_grade').value = "17.2";
+            }
+        }
+
+        document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitPredictBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing with XGBoost Engine...';
+
+            const payload = {
+                student_name: document.getElementById('student_name').value,
+                student_id: document.getElementById('student_id').value,
+                gender: parseInt(document.getElementById('gender').value),
+                age: parseInt(document.getElementById('age').value),
+                marital: parseInt(document.getElementById('marital').value),
+                nationality: parseInt(document.getElementById('nationality').value),
+                scholarship: parseInt(document.getElementById('scholarship').value),
+                debtor: parseInt(document.getElementById('debtor').value),
+                tuition_ok: parseInt(document.getElementById('tuition_ok').value),
+                app_mode: parseInt(document.getElementById('app_mode').value),
+                prev_qual: parseInt(document.getElementById('prev_qual').value),
+                course: parseInt(document.getElementById('course').value),
+                sem1_credits: parseInt(document.getElementById('sem1_credits').value),
+                sem1_grade: parseFloat(document.getElementById('sem1_grade').value),
+                sem2_credits: parseInt(document.getElementById('sem2_credits').value),
+                sem2_grade: parseFloat(document.getElementById('sem2_grade').value),
+                unemployment: parseFloat(document.getElementById('unemployment').value),
+                inflation: parseFloat(document.getElementById('inflation').value),
+                gdp: parseFloat(document.getElementById('gdp').value)
+            };
+
+            try {
+                const res = await API.predict(payload);
+
+                document.getElementById('emptyResultPlaceholder').classList.add('d-none');
+                document.getElementById('liveResultContainer').classList.remove('d-none');
+
+                const riskBadge = document.getElementById('riskBadge');
+                riskBadge.textContent = `${res.prediction} (${res.risk_level} Risk)`;
+                if (res.risk_level === 'High') {
+                    riskBadge.className = 'badge bg-danger px-4 py-2 fs-6 rounded-pill';
+                } else if (res.risk_level === 'Medium') {
+                    riskBadge.className = 'badge bg-warning text-dark px-4 py-2 fs-6 rounded-pill';
+                } else {
+                    riskBadge.className = 'badge bg-success px-4 py-2 fs-6 rounded-pill';
+                }
+
+                document.getElementById('riskProbabilityText').textContent = `${(res.probability * 100).toFixed(1)}%`;
+                document.getElementById('confidenceText').textContent = `${res.confidence}%`;
+                document.getElementById('confidenceBar').style.width = `${res.confidence}%`;
+
+                // Render recommendations
+                const recsList = document.getElementById('recsList');
+                recsList.innerHTML = res.recommendations.map(r => `
+                    <li class="list-group-item bg-transparent"><i class="fas fa-check text-primary me-2"></i>${r}</li>
+                `).join('');
+
+                // PDF download link
+                document.getElementById('downloadPdfBtn').href = `${CONFIG.API_BASE_URL}/prediction/pdf/${res.id}`;
+            } catch (err) {
+                alert("Prediction failed: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-brain me-2"></i> Compute Dropout Risk & Recommendations';
+            }
+        });
+    </script>
+</body>
+</html>

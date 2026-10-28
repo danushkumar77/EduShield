@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}ML Workflow - EduShield{% endblock %}
+
+{% block header_title %}Machine Learning Lifecycle Workflow{% endblock %}
+{% block header_description %}Explore the complete end-to-end data science and engineering process of the EduShield retention engine.{% endblock %}
+
+{% block content %}
+<div class="row g-4 justify-content-center mb-5">
+    <div class="col-12 col-lg-9">
+        <div class="glass-card p-4 shadow-sm anim-delay-1">
+            <h4 class="fw-bold font-outfit mb-4 text-center"><i class="fas fa-project-diagram text-secondary me-2"></i> EduShield Data Pipeline Flowchart</h4>
+            
+            <!-- Workflow Step 1 -->
+            <div class="workflow-step d-flex align-items-start p-3 bg-light rounded border-start border-4 border-primary shadow-sm mb-3">
+                <div class="badge-custom badge-info me-3 py-2 px-3 fw-bold">1</div>
+                <div>
+                    <h5 class="fw-bold mb-1">Raw Dataset Ingestion</h5>
+                    <p class="text-muted small mb-0">Initial student cohort data containing 4,424 records and 35 distinct academic and socioeconomic variables is loaded directly from a local CSV file.</p>
+                </div>
+            </div>
+            
+            <div class="text-center my-2 text-secondary"><i class="fas fa-arrow-down" style="font-size: 1.3rem;"></i></div>
+
+            <!-- Workflow Step 2 -->
+            <div class="workflow-step d-flex align-items-start p-3 bg-light rounded border-start border-4 border-primary shadow-sm mb-3">
+                <div class="badge-custom badge-info me-3 py-2 px-3 fw-bold">2</div>
+                <div>
+                    <h5 class="fw-bold mb-1">Data Preprocessing</h5>
+                    <p class="text-muted small mb-0">Null/missing check and duplicate values removal. Targets are mapped from a multi-class status (Dropout, Enrolled, Graduate) into a binary indicator: Dropout (1: At Risk) vs Graduate/Enrolled (0: Safe).</p>
+                </div>
+            </div>
+            
+            <div class="text-center my-2 text-secondary"><i class="fas fa-arrow-down" style="font-size: 1.3rem;"></i></div>
+
+            <!-- Workflow Step 3 -->
+            <div class="workflow-step d-flex align-items-start p-3 bg-light rounded border-start border-4 border-primary shadow-sm mb-3">
+                <div class="badge-custom badge-info me-3 py-2 px-3 fw-bold">3</div>
+                <div>
+                    <h5 class="fw-bold mb-1">Exploratory Data Analysis (EDA)</h5>
+                    <p class="text-muted small mb-0">Data distributions and statistical weights are calculated. Interactive Plotly charts are drawn to identify correlations between debt status, scholarship status, and enrollment demographics.</p>
+                </div>
+            </div>
+            
+            <div class="text-center my-2 text-secondary"><i class="fas fa-arrow-down" style="font-size: 1.3rem;"></i></div>
+
+            <!-- Workflow Step 4 -->
+            <div class="workflow-step d-flex align-items-start p-3 bg-light rounded border-start border-4 border-primary shadow-sm mb-3">
+                <div class="badge-custom badge-info me-3 py-2 px-3 fw-bold">4</div>
+                <div>
+                    <h5 class="fw-bold mb-1">Feature Scaling</h5>
+                    <p class="text-muted small mb-0">Numerical variables are standardized using a <code>StandardScaler</code> to center feature means at 0 and scale variance to 1, preventing high-value parameters from biasing predictions.</p>
+                </div>
+            </div>
+            
+            <div class="text-center my-2 text-secondary"><i class="fas fa-arrow-down" style="font-size: 1.3rem;"></i></div>
+
+            <!-- Workflow Step 5 -->
+            <div class="workflow-step d-flex align-items-start p-3 bg-light rounded border-start border-4 border-primary shadow-sm mb-3">
+                <div class="badge-custom badge-info me-3 py-2 px-3 fw-bold">5</div>
+                <div>
+                    <h5 class="fw-bold mb-1">Train-Test Data Splitting</h5>
+                    <p class="text-muted small mb-0">The cleaned dataset is split into an 80% training set (3,539 records) to train classification models and a 20% test set (885 records) to validate model performance.</p>
+                </div>
+            </div>
+            
+            <div class="text-center my-2 text-secondary"><i class="fas fa-arrow-down" style="font-size: 1.3rem;"></i></div>
+
+            <!-- Workflow Step 6 -->
+            <div class="workflow-step d-flex align-items-start p-3 bg-light rounded border-start border-4 border-primary shadow-sm mb-3">
+                <div class="badge-custom badge-info me-3 py-2 px-3 fw-bold">6</div>
+                <div>
+                    <h5 class="fw-bold mb-1">Train 7 Machine Learning Models</h5>
+                    <p class="text-muted small mb-0">Trains 7 classification algorithms: Logistic Regression, Decision Trees, Random Forest, Support Vector Machines (SVM), K-Nearest Neighbors (KNN), Gradient Boosting, and XGBoost.</p>
+                </div>
+            </div>
+            
+            <div class="text-center my-2 text-secondary"><i class="fas fa-arrow-down" style="font-size: 1.3rem;"></i></div>
+
+            <!-- Workflow Step 7 -->
+            <div class="workflow-step d-flex align-items-start p-3 bg-light rounded border-start border-4 border-primary shadow-sm mb-3">
+                <div class="badge-custom badge-info me-3 py-2 px-3 fw-bold">7</div>
+                <div>
+                    <h5 class="fw-bold mb-1">Model Evaluation Metrics</h5>
+                    <p class="text-muted small mb-0">Calculates Accuracy, Precision, Recall, F1 Score, and ROC-AUC score metrics for each model. Generates confusion matrices and ROC curves using the 20% validation split.</p>
+                </div>
+            </div>
+            
+            <div class="text-center my-2 text-secondary"><i class="fas fa-arrow-down" style="font-size: 1.3rem;"></i></div>
+
+            <!-- Workflow Step 8 -->
+            <div class="workflow-step d-flex align-items-start p-3 bg-light rounded border-start border-4 border-success shadow-sm mb-3">
+                <div class="badge-custom badge-success me-3 py-2 px-3 fw-bold">8</div>
+                <div>
+                    <h5 class="fw-bold mb-1">Best Model Deployment (XGBoost)</h5>
+                    <p class="text-muted small mb-0">XGBoost achieved the highest F1 score (80.74%) and Accuracy (88.25%). The model parameters are serialized to <code>student_dropout_model.pkl</code> and loaded into the Flask server.</p>
+                </div>
+            </div>
+            
+            <div class="text-center my-2 text-secondary"><i class="fas fa-arrow-down" style="font-size: 1.3rem;"></i></div>
+
+            <!-- Workflow Step 9 -->
+            <div class="workflow-step d-flex align-items-start p-3 bg-light rounded border-start border-4 border-success shadow-sm mb-3">
+                <div class="badge-custom badge-success me-3 py-2 px-3 fw-bold">9</div>
+                <div>
+                    <h5 class="fw-bold mb-1">Real-Time Risk Prediction</h5>
+                    <p class="text-muted small mb-0">Form parameters submitted by advisors are compiled, scaled, and scored by the active XGBoost model to yield instantaneous student retention probabilities.</p>
+                </div>
+            </div>
+            
+            <div class="text-center my-2 text-secondary"><i class="fas fa-arrow-down" style="font-size: 1.3rem;"></i></div>
+
+            <!-- Workflow Step 10 -->
+            <div class="workflow-step d-flex align-items-start p-3 bg-light rounded border-start border-4 border-success shadow-sm mb-0">
+                <div class="badge-custom badge-success me-3 py-2 px-3 fw-bold">10</div>
+                <div>
+                    <h5 class="fw-bold mb-1">Targeted Recommendations</h5>
+                    <p class="text-muted small mb-0">Tailors dynamic interventions based on risk classifications (Academic tutoring and aid for High-risk; monthly trackers for Medium-risk; career guidance for Low-risk).</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Platform - EduShield</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+<body>
+    <div id="navbar-mount"></div>
+
+    <div class="container py-4">
+        <!-- Header -->
+        <div class="row g-4 mb-4">
+            <div class="col-12">
+                <div class="glass-card p-4 border-start border-5 border-primary shadow-sm">
+                    <h3 class="fw-bold font-outfit mb-1">About EduShield Platform</h3>
+                    <p class="text-muted small mb-0">System Architecture, ML Workflow, and Cloud Deployment</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Description & Objectives -->
+        <div class="row g-4 mb-4">
+            <div class="col-12 col-lg-7">
+                <div class="glass-card p-4 shadow-sm h-100">
+                    <h5 class="fw-bold text-primary mb-3"><i class="fas fa-circle-info me-2"></i>Project Mission</h5>
+                    <p class="text-muted leading-relaxed" style="font-size: 1.05rem;">
+                        <strong>EduShield</strong> is an enterprise-grade AI analytics platform engineered to assist academic administrators, institutional deans, and advisors in reducing university dropout rates. By modeling enrollment profiles across 34 feature dimensions, EduShield transforms complex student indicators into interpretable risk probabilities.
+                    </p>
+                    <p class="text-muted leading-relaxed mb-0">
+                        The platform operates with a decoupled modern architecture: a high-speed Edge frontend served globally on <strong>Vercel</strong>, backed by an autonomous Python machine learning service hosted on <strong>Render</strong>, persisting audit logs in <strong>MongoDB Atlas</strong>.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-5">
+                <div class="glass-card p-4 shadow-sm h-100">
+                    <h5 class="fw-bold text-purple mb-3"><i class="fas fa-bullseye me-2"></i>Core Objectives</h5>
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas fa-check-circle text-success me-3 mt-1 fs-5"></i>
+                        <div>
+                            <h6 class="fw-bold mb-0">Early Warning Alerts</h6>
+                            <p class="text-muted small mb-0">Detect at-risk students before first-year dropout occurs.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas fa-check-circle text-success me-3 mt-1 fs-5"></i>
+                        <div>
+                            <h6 class="fw-bold mb-0">Targeted Interventions</h6>
+                            <p class="text-muted small mb-0">Deliver personalized financial and academic counselling action lists.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start">
+                        <i class="fas fa-check-circle text-success me-3 mt-1 fs-5"></i>
+                        <div>
+                            <h6 class="fw-bold mb-0">Continuous Auditing</h6>
+                            <p class="text-muted small mb-0">Track and export audit logs for compliance and institutional reporting.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Architecture Breakdown -->
+        <div class="row g-4 mb-4">
+            <div class="col-12">
+                <div class="glass-card p-4 shadow-sm">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-diagram-project text-secondary me-2"></i>Cloud Architecture & Pipeline</h5>
+                    <div class="row g-3 text-center">
+                        <div class="col-12 col-md-4">
+                            <div class="p-4 rounded border bg-light h-100">
+                                <span class="badge bg-dark rounded-pill px-3 py-1 mb-2">Frontend</span>
+                                <h5 class="fw-bold mb-1">Vercel Edge Network</h5>
+                                <p class="text-muted small mb-0">Static HTML5/CSS3/JavaScript SPA with sub-second global CDN latency and responsive glassmorphism UI.</p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="p-4 rounded border bg-light h-100">
+                                <span class="badge bg-primary rounded-pill px-3 py-1 mb-2">ML Backend</span>
+                                <h5 class="fw-bold mb-1">Render Cloud Service</h5>
+                                <p class="text-muted small mb-0">Python 3 Flask API with Gunicorn, StandardScaler normalization, and XGBoost inference engine.</p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="p-4 rounded border bg-light h-100">
+                                <span class="badge bg-success rounded-pill px-3 py-1 mb-2">Cloud Database</span>
+                                <h5 class="fw-bold mb-1">MongoDB Atlas Cluster</h5>
+                                <p class="text-muted small mb-0">AWS Mumbai replica set storing users, analyst sessions, and historical student risk assessments.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/nav.js"></script>
+</body>
+</html>

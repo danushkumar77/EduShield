@@ -1,0 +1,262 @@
+{
+    "best_model_name": "XGBoost Classifier",
+    "models": {
+        "Logistic Regression": {
+            "accuracy": 88.02,
+            "precision": 87.39,
+            "recall": 73.24,
+            "f1_score": 79.69,
+            "roc_auc": 92.89,
+            "confusion_matrix": [
+                [
+                    571,
+                    30
+                ],
+                [
+                    76,
+                    208
+                ]
+            ]
+        },
+        "Decision Tree Classifier": {
+            "accuracy": 79.44,
+            "precision": 66.56,
+            "recall": 72.18,
+            "f1_score": 69.26,
+            "roc_auc": 77.52,
+            "confusion_matrix": [
+                [
+                    498,
+                    103
+                ],
+                [
+                    79,
+                    205
+                ]
+            ]
+        },
+        "Random Forest Classifier": {
+            "accuracy": 88.25,
+            "precision": 87.82,
+            "recall": 73.59,
+            "f1_score": 80.08,
+            "roc_auc": 93.05,
+            "confusion_matrix": [
+                [
+                    572,
+                    29
+                ],
+                [
+                    75,
+                    209
+                ]
+            ]
+        },
+        "Support Vector Machine (SVM)": {
+            "accuracy": 87.57,
+            "precision": 90.65,
+            "recall": 68.31,
+            "f1_score": 77.91,
+            "roc_auc": 92.78,
+            "confusion_matrix": [
+                [
+                    581,
+                    20
+                ],
+                [
+                    90,
+                    194
+                ]
+            ]
+        },
+        "K-Nearest Neighbors (KNN)": {
+            "accuracy": 84.07,
+            "precision": 85.93,
+            "recall": 60.21,
+            "f1_score": 70.81,
+            "roc_auc": 87.42,
+            "confusion_matrix": [
+                [
+                    573,
+                    28
+                ],
+                [
+                    113,
+                    171
+                ]
+            ]
+        },
+        "Gradient Boosting Classifier": {
+            "accuracy": 87.23,
+            "precision": 84.62,
+            "recall": 73.59,
+            "f1_score": 78.72,
+            "roc_auc": 93.36,
+            "confusion_matrix": [
+                [
+                    563,
+                    38
+                ],
+                [
+                    75,
+                    209
+                ]
+            ]
+        },
+        "XGBoost Classifier": {
+            "accuracy": 88.25,
+            "precision": 85.16,
+            "recall": 76.76,
+            "f1_score": 80.74,
+            "roc_auc": 92.64,
+            "confusion_matrix": [
+                [
+                    563,
+                    38
+                ],
+                [
+                    66,
+                    218
+                ]
+            ]
+        }
+    },
+    "feature_importance": [
+        {
+            "feature": "Curricular units 2nd sem (approved)",
+            "importance": 0.2468883991241455
+        },
+        {
+            "feature": "Tuition fees up to date",
+            "importance": 0.14971336722373962
+        },
+        {
+            "feature": "Curricular units 1st sem (enrolled)",
+            "importance": 0.0711837112903595
+        },
+        {
+            "feature": "Debtor",
+            "importance": 0.03349017724394798
+        },
+        {
+            "feature": "Curricular units 1st sem (approved)",
+            "importance": 0.03220202028751373
+        },
+        {
+            "feature": "Scholarship holder",
+            "importance": 0.03210467845201492
+        },
+        {
+            "feature": "Curricular units 1st sem (credited)",
+            "importance": 0.02723473496735096
+        },
+        {
+            "feature": "Curricular units 2nd sem (credited)",
+            "importance": 0.025589756667613983
+        },
+        {
+            "feature": "Curricular units 2nd sem (enrolled)",
+            "importance": 0.02485993504524231
+        },
+        {
+            "feature": "Gender",
+            "importance": 0.02279908023774624
+        },
+        {
+            "feature": "Daytime/evening attendance",
+            "importance": 0.02177584171295166
+        },
+        {
+            "feature": "Nacionality",
+            "importance": 0.020174944773316383
+        },
+        {
+            "feature": "Course",
+            "importance": 0.018720602616667747
+        },
+        {
+            "feature": "Age at enrollment",
+            "importance": 0.017995722591876984
+        },
+        {
+            "feature": "Mother's occupation",
+            "importance": 0.017372384667396545
+        },
+        {
+            "feature": "Curricular units 1st sem (evaluations)",
+            "importance": 0.016160886734724045
+        },
+        {
+            "feature": "Curricular units 2nd sem (grade)",
+            "importance": 0.015995502471923828
+        },
+        {
+            "feature": "GDP",
+            "importance": 0.015728335827589035
+        },
+        {
+            "feature": "Mother's qualification",
+            "importance": 0.015578924678266048
+        },
+        {
+            "feature": "Curricular units 2nd sem (without evaluations)",
+            "importance": 0.015367439016699791
+        },
+        {
+            "feature": "Curricular units 2nd sem (evaluations)",
+            "importance": 0.014984488487243652
+        },
+        {
+            "feature": "Curricular units 1st sem (grade)",
+            "importance": 0.014452287927269936
+        },
+        {
+            "feature": "Curricular units 1st sem (without evaluations)",
+            "importance": 0.014104772359132767
+        },
+        {
+            "feature": "Application mode",
+            "importance": 0.013946760445833206
+        },
+        {
+            "feature": "Unemployment rate",
+            "importance": 0.013586480170488358
+        },
+        {
+            "feature": "Displaced",
+            "importance": 0.013559175655245781
+        },
+        {
+            "feature": "Father's qualification",
+            "importance": 0.013367078267037868
+        },
+        {
+            "feature": "Inflation rate",
+            "importance": 0.013112874701619148
+        },
+        {
+            "feature": "Application order",
+            "importance": 0.012842231430113316
+        },
+        {
+            "feature": "Father's occupation",
+            "importance": 0.01234466303139925
+        },
+        {
+            "feature": "Previous qualification",
+            "importance": 0.01156905572861433
+        },
+        {
+            "feature": "Marital status",
+            "importance": 0.011193660087883472
+        },
+        {
+            "feature": "International",
+            "importance": 0.0
+        },
+        {
+            "feature": "Educational special needs",
+            "importance": 0.0
+        }
+    ]
+}

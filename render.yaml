@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: edushield-student-retention
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn app:app"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.8
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FLASK_ENV
+        value: production
+      - key: MONGO_URI
+        value: "mongodb+srv://danushkumardk07_db_user:danushkumar%405995@cluster0.22gafw4.mongodb.net/?retryWrites=true&w=majority&appName=EduShield"
+      - key: MONGO_DB_NAME
+        value: edushield

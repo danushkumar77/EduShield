@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Home - EduShield{% endblock %}
+
+{% block page_header %}
+<!-- Overriding default header with custom landing hero -->
+<div class="landing-hero py-5 text-center text-light" style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%); margin-bottom: 2rem; position: relative; overflow: hidden; border-radius: 0 0 var(--radius-xl) var(--radius-xl); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);">
+    <div class="container py-5" style="position: relative; z-index: 2;">
+        <div class="badge-custom badge-info mb-3 px-3 py-2 text-uppercase fw-bold shadow-sm" style="font-size: 0.8rem; letter-spacing: 2px;">
+            <i class="fas fa-shield-halved me-1"></i> AI-Powered Student Success
+        </div>
+        <h1 class="display-3 fw-bold mb-3 font-outfit" style="color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.2);">Edu<span style="color: var(--color-accent);">Shield</span></h1>
+        <p class="lead mb-4 text-light mx-auto" style="max-width: 700px; opacity: 0.95; font-size: 1.25rem;">
+            A cutting-edge Machine Learning and Data Science analytics platform designed to predict student attrition, assess academic risks, and recommend targeted retention interventions.
+        </p>
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <a href="{{ url_for('login') }}" class="btn btn-light btn-lg px-4 py-3 fw-bold shadow-sm" style="border-radius: var(--radius-md); color: var(--color-primary);">
+                <i class="fas fa-right-to-bracket me-2"></i> Log In
+            </a>
+            <a href="{{ url_for('register') }}" class="btn btn-outline-light btn-lg px-4 py-3 fw-bold" style="border-radius: var(--radius-md); border-width: 2px;">
+                <i class="fas fa-user-plus me-2"></i> Create Account
+            </a>
+        </div>
+    </div>
+    <!-- Background flares -->
+    <div style="position: absolute; top: -50%; left: -30%; width: 80%; height: 150%; background: radial-gradient(circle, rgba(14,165,233,0.15) 0%, rgba(0,0,0,0) 70%); filter: blur(50px); pointer-events: none;"></div>
+    <div style="position: absolute; bottom: -50%; right: -30%; width: 80%; height: 150%; background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, rgba(0,0,0,0) 70%); filter: blur(50px); pointer-events: none;"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-5">
+    <!-- Project Introduction card -->
+    <div class="col-12">
+        <div class="glass-card p-4 shadow-sm anim-delay-1">
+            <h3 class="fw-bold mb-3"><i class="fas fa-compass text-secondary me-2"></i> Project Introduction</h3>
+            <p class="text-muted mb-0" style="font-size: 1.05rem; line-height: 1.7;">
+                <strong>EduShield</strong> is an advanced administrative intelligence tool that leverages data science to address one of higher education's most persistent challenges: student attrition. By examining historical cohorts across demographic backgrounds, socioeconomic conditions, and early academic records, our predictive engine calculates real-time retention probabilities, empowering academic advisors to act proactively before a student drops out.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <!-- Key Features -->
+    <div class="col-12 col-md-4">
+        <div class="glass-card p-4 h-100 text-center shadow-sm anim-delay-2">
+            <div class="mb-3 text-secondary" style="font-size: 2.5rem;"><i class="fas fa-brain"></i></div>
+            <h5 class="fw-bold">Predictive Risk Engine</h5>
+            <p class="text-muted small mb-0">Analyzes student academic and socioeconomic profiles through our trained XGBoost classifier to compute real-time dropout probabilities.</p>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="glass-card p-4 h-100 text-center shadow-sm anim-delay-3">
+            <div class="mb-3 text-accent" style="font-size: 2.5rem;"><i class="fas fa-chart-pie"></i></div>
+            <h5 class="fw-bold">Interactive EDA</h5>
+            <p class="text-muted small mb-0">Explores student demographics, scholarship parameters, and course attrition metrics via responsive, multi-dimensional Plotly charts.</p>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="glass-card p-4 h-100 text-center shadow-sm anim-delay-4">
+            <div class="mb-3 text-purple" style="font-size: 2.5rem;"><i class="fas fa-list-check"></i></div>
+            <h5 class="fw-bold">Targeted Interventions</h5>
+            <p class="text-muted small mb-0">Provides personalized academic counselling, financial aid advice, and mentoring interventions based on the predicted risk level.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Workflow Overview & Technology Stack -->
+<div class="row g-4 mb-4">
+    <div class="col-12 col-lg-6">
+        <div class="glass-card p-4 h-100 shadow-sm anim-delay-2">
+            <h4 class="fw-bold mb-3"><i class="fas fa-route text-secondary me-2"></i> Workflow Overview</h4>
+            <div class="mt-3">
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge-custom badge-info me-3 py-2 px-3 fw-bold" style="min-width: 60px;">Step 1</span>
+                    <div>
+                        <h6 class="fw-bold mb-0">Input Demographics & Academic Credits</h6>
+                        <p class="text-muted small mb-0">Advisors fill in standard socioeconomic and first/second semester grades.</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge-custom badge-info me-3 py-2 px-3 fw-bold" style="min-width: 60px;">Step 2</span>
+                    <div>
+                        <h6 class="fw-bold mb-0">Scaling & Model Inference</h6>
+                        <p class="text-muted small mb-0">The data is scaled and processed by the auto-selected XGBoost model.</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mb-0">
+                    <span class="badge-custom badge-success me-3 py-2 px-3 fw-bold" style="min-width: 60px;">Step 3</span>
+                    <div>
+                        <h6 class="fw-bold mb-0">Report Generation & Interventions</h6>
+                        <p class="text-muted small mb-0">The system displays the risk level, outputs recommendations, and exports a PDF report.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-lg-6">
+        <div class="glass-card p-4 h-100 shadow-sm anim-delay-3">
+            <h4 class="fw-bold mb-3"><i class="fas fa-layer-group text-purple me-2"></i> Technology Stack</h4>
+            <div class="row g-3 mt-2">
+                <div class="col-6">
+                    <div class="p-3 bg-light rounded border-start border-4 border-primary">
+                        <h6 class="fw-bold mb-1">Backend Core</h6>
+                        <p class="text-muted small mb-0">Flask, Python, Gunicorn</p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="p-3 bg-light rounded border-start border-4 border-secondary">
+                        <h6 class="fw-bold mb-1">Database & Storage</h6>
+                        <p class="text-muted small mb-0">SQLite, joblib serialization</p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="p-3 bg-light rounded border-start border-4 border-accent">
+                        <h6 class="fw-bold mb-1">Data Science</h6>
+                        <p class="text-muted small mb-0">Pandas, NumPy, Scikit-learn</p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="p-3 bg-light rounded border-start border-4 border-purple">
+                        <h6 class="fw-bold mb-1">Machine Learning</h6>
+                        <p class="text-muted small mb-0">XGBoost, Plotly Express</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

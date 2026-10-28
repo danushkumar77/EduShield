@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retention Analytics Dashboard - EduShield</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+</head>
+<body>
+    <div id="navbar-mount"></div>
+
+    <div class="container py-4">
+        <!-- Dashboard Header -->
+        <div class="row g-4 mb-4">
+            <div class="col-12">
+                <div class="glass-card p-4 border-start border-5 border-primary shadow-sm d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <h3 class="fw-bold font-outfit mb-0" id="dashGreeting">Retention Analytics Dashboard</h3>
+                            <span class="badge bg-primary" id="roleBadge">User</span>
+                        </div>
+                        <p class="text-muted small mb-0">Connected live to <strong>MongoDB Atlas</strong> &bull; Production XGBoost Retention Engine</p>
+                    </div>
+                    <div class="mt-3 mt-md-0 d-flex gap-2">
+                        <a href="predict.html" class="btn btn-primary fw-bold px-4 py-2 rounded-pill shadow-sm">
+                            <i class="fas fa-graduation-cap me-2"></i> New Risk Assessment
+                        </a>
+                        <a href="history.html" class="btn btn-outline-secondary fw-bold px-4 py-2 rounded-pill">
+                            <i class="fas fa-history me-2"></i> Audit Logs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI Cards Grid -->
+        <div class="row g-4 mb-4" id="kpiCards">
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="glass-card kpi-card shadow-sm p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="kpi-value d-block fs-2 fw-bold" id="kpiTotalPreds">--</span>
+                            <span class="kpi-label text-muted small">Total Assessments</span>
+                        </div>
+                        <div class="kpi-icon-container kpi-blue fs-3 text-primary">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="glass-card kpi-card shadow-sm p-4 border-bottom border-3 border-danger">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="kpi-value d-block fs-2 fw-bold text-danger" id="kpiHighRisk">--</span>
+                            <span class="kpi-label text-muted small">High Risk (At-Risk)</span>
+                        </div>
+                        <div class="kpi-icon-container kpi-red fs-3 text-danger">
+                            <i class="fas fa-triangle-exclamation"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="glass-card kpi-card shadow-sm p-4 border-bottom border-3 border-warning">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="kpi-value d-block fs-2 fw-bold text-warning" id="kpiMedRisk">--</span>
+                            <span class="kpi-label text-muted small">Medium Risk</span>
+                        </div>
+                        <div class="kpi-icon-container kpi-orange fs-3 text-warning">
+                            <i class="fas fa-circle-exclamation"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="glass-card kpi-card shadow-sm p-4 border-bottom border-3 border-success">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="kpi-value d-block fs-2 fw-bold text-success" id="kpiLowRisk">--</span>
+                            <span class="kpi-label text-muted small">Low Risk (On Track)</span>
+                        </div>
+                        <div class="kpi-icon-container kpi-green fs-3 text-success">
+                            <i class="fas fa-circle-check"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Visual Analytics Row -->
+        <div class="row g-4 mb-4">
+            <div class="col-12 col-lg-6">
+                <div class="glass-card p-4 shadow-sm h-100">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-chart-pie text-primary me-2"></i>Student Risk Distribution</h5>
+                    <div id="riskPieChart" style="height: 320px;"></div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="glass-card p-4 shadow-sm h-100">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-microchip text-accent me-2"></i>Classifier Benchmark Highlights</h5>
+                    <div id="modelBarChart" style="height: 320px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Prediction History Table -->
+        <div class="row g-4 mb-4">
+            <div class="col-12">
+                <div class="glass-card p-4 shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0"><i class="fas fa-clock-rotate-left text-primary me-2"></i>Recent Student Assessments (MongoDB Atlas)</h5>
+                        <a href="history.html" class="btn btn-sm btn-outline-primary rounded-pill px-3">View All Logs</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Student ID</th>
+                                    <th>Predicted Outcome</th>
+                                    <th>Probability</th>
+                                    <th>Risk Level</th>
+                                    <th>Date</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentTableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center py-4 text-muted">
+                                        <i class="fas fa-spinner fa-spin me-2"></i>Loading live records from MongoDB Atlas...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/nav.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const user = API.getUser();
+            if (user) {
+                document.getElementById('dashGreeting').textContent = `Welcome back, ${user.username}`;
+                document.getElementById('roleBadge').textContent = user.role.toUpperCase();
+            }
+
+            try {
+                const res = await API.getDashboardStats();
+                const stats = res.stats || {};
+
+                document.getElementById('kpiTotalPreds').textContent = stats.total_predictions || 0;
+                document.getElementById('kpiHighRisk').textContent = stats.high_risk_count || 0;
+                document.getElementById('kpiMedRisk').textContent = stats.medium_risk_count || 0;
+                document.getElementById('kpiLowRisk').textContent = stats.low_risk_count || 0;
+
+                // Render Risk Pie Chart
+                const high = stats.high_risk_count || 0;
+                const med = stats.medium_risk_count || 0;
+                const low = stats.low_risk_count || 0;
+                const total = high + med + low;
+
+                const pieData = [{
+                    values: total > 0 ? [high, med, low] : [1, 1, 2],
+                    labels: ['High Risk', 'Medium Risk', 'Low Risk'],
+                    type: 'pie',
+                    hole: 0.5,
+                    marker: { colors: ['#dc2626', '#f59e0b', '#10b981'] },
+                    textinfo: 'label+percent'
+                }];
+                const pieLayout = {
+                    margin: { t: 20, b: 20, l: 20, r: 20 },
+                    paper_bgcolor: 'transparent',
+                    showlegend: true,
+                    legend: { orientation: 'h', y: -0.1 }
+                };
+                Plotly.newPlot('riskPieChart', pieData, pieLayout, { responsive: true, displayModeBar: false });
+
+                // Render Models Benchmark Chart
+                const barData = [{
+                    x: ['XGBoost', 'Random Forest', 'Logistic Reg', 'Grad Boosting', 'SVM', 'KNN', 'Decision Tree'],
+                    y: [88.25, 88.25, 88.02, 87.23, 87.57, 84.07, 79.44],
+                    type: 'bar',
+                    marker: {
+                        color: ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#a855f7', '#c084fc', '#94a3b8']
+                    }
+                }];
+                const barLayout = {
+                    margin: { t: 20, b: 50, l: 40, r: 20 },
+                    paper_bgcolor: 'transparent',
+                    plot_bgcolor: 'transparent',
+                    yaxis: { title: 'Accuracy (%)', range: [70, 95] },
+                    xaxis: { tickangle: -25 }
+                };
+                Plotly.newPlot('modelBarChart', barData, barLayout, { responsive: true, displayModeBar: false });
+
+                // Render Recent Table
+                const tbody = document.getElementById('recentTableBody');
+                const recent = stats.recent_predictions || [];
+                if (recent.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">No student assessments yet. Run your first prediction above!</td></tr>`;
+                } else {
+                    tbody.innerHTML = recent.map(p => `
+                        <tr>
+                            <td class="fw-bold">${p.student_name || 'Anonymous Student'}</td>
+                            <td><code>${p.student_id || 'N/A'}</code></td>
+                            <td>
+                                <span class="badge ${p.prediction === 'At Risk' ? 'bg-danger-subtle text-danger border border-danger-subtle' : 'bg-success-subtle text-success border border-success-subtle'} px-3 py-2 rounded-pill">
+                                    ${p.prediction}
+                                </span>
+                            </td>
+                            <td>${(p.probability * 100).toFixed(1)}%</td>
+                            <td>
+                                <span class="badge ${p.risk_level === 'High' ? 'bg-danger' : (p.risk_level === 'Medium' ? 'bg-warning text-dark' : 'bg-success')} rounded-pill px-3 py-1">
+                                    ${p.risk_level}
+                                </span>
+                            </td>
+                            <td class="small text-muted">${p.created_at || 'Recent'}</td>
+                            <td class="text-end">
+                                <a href="history.html" class="btn btn-sm btn-light border rounded-pill">View Details</a>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (err) {
+                console.error("Dashboard load failed:", err);
+            }
+        });
+    </script>
+</body>
+</html>

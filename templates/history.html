@@ -1,0 +1,303 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction History - EduShield{% endblock %}
+
+{% block header_title %}Student Prediction History{% endblock %}
+{% block header_description %}Browse, filter, and search through previous student dropout risk assessments. Export records to CSV or download PDF reports.{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-4">
+    <div class="col-12">
+        <div class="glass-card p-4 shadow-sm anim-delay-1">
+            <!-- Filter & Search Header -->
+            <form method="GET" action="{{ url_for('history') }}" class="row g-3 align-items-center">
+                <!-- Search bar -->
+                <div class="col-12 col-md-5">
+                    <label for="search" class="form-label fw-bold small text-muted"><i class="fas fa-magnifying-glass me-1"></i> Search Student</label>
+                    <input type="text" name="search" id="search" class="form-control" placeholder="Search by name or ID..." value="{{ search or '' }}" style="border-radius: var(--radius-sm);">
+                </div>
+                
+                <!-- Risk Level Filter -->
+                <div class="col-12 col-sm-6 col-md-3">
+                    <label for="risk_level" class="form-label fw-bold small text-muted"><i class="fas fa-triangle-exclamation me-1"></i> Risk Level</label>
+                    <select name="risk_level" id="risk_level" class="form-select" style="border-radius: var(--radius-sm);">
+                        <option value="">-- All Levels --</option>
+                        <option value="High" {% if risk_level == 'High' %}selected{% endif %}>High Risk</option>
+                        <option value="Medium" {% if risk_level == 'Medium' %}selected{% endif %}>Medium Risk</option>
+                        <option value="Low" {% if risk_level == 'Low' %}selected{% endif %}>Low Risk</option>
+                    </select>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="col-12 col-sm-6 col-md-4 d-flex gap-2 align-self-end">
+                    <button type="submit" class="btn btn-secondary w-100 fw-bold" style="border-radius: var(--radius-sm);">
+                        <i class="fas fa-filter me-2"></i> Apply Filters
+                    </button>
+                    <a href="{{ url_for('history') }}" class="btn btn-outline-secondary w-50 fw-bold" style="border-radius: var(--radius-sm);">
+                        Reset
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-12">
+        <div class="glass-card p-4 shadow-sm anim-delay-2">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
+                <h5 class="card-title mb-0"><i class="fas fa-table-list text-primary me-2"></i> Logged Assessments</h5>
+                
+                <!-- CSV Export -->
+                <a href="{{ url_for('export_history', search=search, risk_level=risk_level) }}" class="btn btn-success fw-bold px-3 py-2" style="border-radius: var(--radius-sm);">
+                    <i class="fas fa-file-csv me-2"></i> Export CSV
+                </a>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Student Name</th>
+                            <th>Prediction</th>
+                            <th>Risk Probability</th>
+                            <th>Risk Level</th>
+                            <th>Analyst</th>
+                            <th>Date / Time</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if predictions %}
+                            {% for pred in predictions %}
+                            <tr>
+                                <td><code>{{ pred.student_id or 'N/A' }}</code></td>
+                                <td class="fw-bold">{{ pred.student_name or 'Anonymous Student' }}</td>
+                                <td>
+                                    {% if pred.prediction == 'At Risk' %}
+                                        <span class="badge-custom badge-danger"><i class="fas fa-exclamation-triangle me-1"></i>At Risk</span>
+                                    {% else %}
+                                        <span class="badge-custom badge-success"><i class="fas fa-check-circle me-1"></i>Not At Risk</span>
+                                    {% endif %}
+                                </td>
+                                <td class="fw-bold">{{ (pred.probability * 100)|int }}%</td>
+                                <td>
+                                    {% if pred.risk_level == 'High' %}
+                                        <span class="badge-custom badge-danger">High</span>
+                                    {% elif pred.risk_level == 'Medium' %}
+                                        <span class="badge-custom badge-warning">Medium</span>
+                                    {% else %}
+                                        <span class="badge-custom badge-success">Low</span>
+                                    {% endif %}
+                                </td>
+                                <td><span class="badge-custom badge-info"><i class="fas fa-user-circle me-1"></i>{{ pred.analyst_name }}</span></td>
+                                <td class="small text-muted">{{ pred.created_at[:16] }}</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <!-- View Details Modal Trigger -->
+                                        <button class="btn btn-sm btn-outline-secondary py-1" onclick="showPredictionDetails({{ pred.id }})" style="border-radius: var(--radius-sm);">
+                                            <i class="fas fa-eye"></i> Details
+                                        </button>
+                                        <!-- Download PDF Report -->
+                                        <a href="{{ url_for('download_pdf', pred_id=pred.id) }}" class="btn btn-sm btn-purple py-1" style="border-radius: var(--radius-sm);">
+                                            <i class="fas fa-file-pdf"></i> Report
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="8" class="text-center py-4 text-muted">
+                                    <i class="fas fa-face-meh mb-2" style="font-size: 2.5rem; opacity: 0.5;"></i>
+                                    <p class="small mb-0">No matching history records found.</p>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination Controls -->
+            {% if total_pages > 1 %}
+            <div class="d-flex justify-content-center mt-4">
+                <nav aria-label="Prediction history pagination">
+                    <ul class="pagination mb-0">
+                        <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                            <a class="page-link" href="{{ url_for('history', page=page-1, search=search, risk_level=risk_level) }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% for p in range(1, total_pages + 1) %}
+                        <li class="page-item {% if p == page %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('history', page=p, search=search, risk_level=risk_level) }}">{{ p }}</a>
+                        </li>
+                        {% endfor %}
+                        <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+                            <a class="page-link" href="{{ url_for('history', page=page+1, search=search, risk_level=risk_level) }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal Dialog for Single Prediction Details -->
+<div class="modal fade" id="predictionDetailsModal" tabindex="-1" aria-labelledby="predictionDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content glass-card shadow-lg border-0" style="background: rgba(255, 255, 255, 0.98);">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-dark font-outfit" id="predictionDetailsModalLabel"><i class="fas fa-user-graduate me-2"></i> Student Assessment Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-3">
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <div class="p-3 bg-light rounded">
+                            <span class="d-block text-muted small fw-bold">Student Name</span>
+                            <span id="modal-student-name" class="fw-bold text-dark">Sarah Smith</span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="p-3 bg-light rounded">
+                            <span class="d-block text-muted small fw-bold">Student ID</span>
+                            <span id="modal-student-id" class="fw-bold text-dark">STU-2023-094</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <h6 class="fw-bold text-secondary mt-4 mb-2">Model Decision Outputs</h6>
+                <div class="row g-3">
+                    <div class="col-6 col-md-4">
+                        <div class="p-3 bg-light rounded text-center border-bottom border-3" id="modal-risk-banner">
+                            <span class="d-block text-muted small fw-bold">Risk Assessment</span>
+                            <span id="modal-prediction" class="fw-bold">At Risk</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="p-3 bg-light rounded text-center">
+                            <span class="d-block text-muted small fw-bold">Risk Probability</span>
+                            <span id="modal-probability" class="fw-bold text-dark">82%</span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="p-3 bg-light rounded text-center">
+                            <span class="d-block text-muted small fw-bold">Model Confidence</span>
+                            <span id="modal-confidence" class="fw-bold text-dark">94.8%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <h6 class="fw-bold text-secondary mt-4 mb-2">Input Variables Summary</h6>
+                <div class="row g-2" id="modal-inputs-container">
+                    <!-- Loaded dynamically via JS -->
+                </div>
+                
+                <h6 class="fw-bold text-secondary mt-4 mb-2">Recommended Interventions</h6>
+                <div class="p-3 bg-light rounded">
+                    <ul class="mb-0 text-muted small ps-3" id="modal-recommendations">
+                        <!-- Loaded dynamically via JS -->
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <a href="#" id="modal-download-report" class="btn btn-purple px-4 py-2 fw-bold" style="border-radius: var(--radius-sm);">
+                    <i class="fas fa-file-pdf me-1"></i> Download PDF Report
+                </a>
+                <button type="button" class="btn btn-secondary px-4 py-2" data-bs-dismiss="modal" style="border-radius: var(--radius-sm);">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Fetch single prediction details and render in modal overlay
+function showPredictionDetails(id) {
+    fetch('/prediction/details/' + id, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+        
+        // Load basic text details
+        document.getElementById('modal-student-name').innerText = data.student_name || 'Anonymous Student';
+        document.getElementById('modal-student-id').innerText = data.student_id || 'N/A';
+        document.getElementById('modal-prediction').innerText = data.prediction;
+        document.getElementById('modal-probability').innerText = Math.round(data.probability * 100) + '%';
+        document.getElementById('modal-confidence').innerText = data.confidence + '%';
+        
+        // Dynamic Risk level banner coloring
+        const banner = document.getElementById('modal-risk-banner');
+        banner.className = "p-3 rounded text-center border-bottom border-3 ";
+        if (data.risk_level === 'High') {
+            banner.classList.add('bg-danger-subtle', 'border-danger', 'text-danger');
+        } else if (data.risk_level === 'Medium') {
+            banner.classList.add('bg-warning-subtle', 'border-warning', 'text-warning');
+        } else {
+            banner.classList.add('bg-success-subtle', 'border-success', 'text-success');
+        }
+        
+        // Render inputs variables grid
+        const inputsContainer = document.getElementById('modal-inputs-container');
+        inputsContainer.innerHTML = '';
+        
+        const importantInputs = {
+            'Curricular units 1st sem (approved)': 'Sem1 Credits Approved',
+            'Curricular units 1st sem (grade)': 'Sem1 Avg Grade',
+            'Curricular units 2nd sem (approved)': 'Sem2 Credits Approved',
+            'Curricular units 2nd sem (grade)': 'Sem2 Avg Grade',
+            'Tuition fees up to date': 'Tuition Compliant (1=Yes)',
+            'Debtor': 'Owes Tuition (1=Yes)',
+            'Scholarship holder': 'Scholarship Holder (1=Yes)',
+            'Age at enrollment': 'Age at Enrollment'
+        };
+        
+        Object.keys(importantInputs).forEach(key => {
+            const val = data.input_data[key];
+            const name = importantInputs[key];
+            
+            const col = document.createElement('div');
+            col.className = 'col-6 col-sm-3';
+            col.innerHTML = `
+                <div class="p-2 bg-light rounded text-center border border-light">
+                    <span class="d-block text-muted" style="font-size: 0.75rem;">${name}</span>
+                    <span class="fw-bold text-dark small">${val}</span>
+                </div>
+            `;
+            inputsContainer.appendChild(col);
+        });
+        
+        // Render recommendations bullet list
+        const recList = document.getElementById('modal-recommendations');
+        recList.innerHTML = '';
+        data.recommendations.forEach(rec => {
+            const li = document.createElement('li');
+            li.className = 'mb-1';
+            li.innerHTML = `<strong>${rec}</strong>`;
+            recList.appendChild(li);
+        });
+        
+        // Update PDF Download link
+        document.getElementById('modal-download-report').href = '/prediction/pdf/' + data.id;
+        
+        // Show modal using Bootstrap API
+        const detailsModal = new bootstrap.Modal(document.getElementById('predictionDetailsModal'));
+        detailsModal.show();
+    })
+    .catch(err => {
+        console.error("Error fetching assessment details:", err);
+    });
+}
+</script>
+{% endblock %}

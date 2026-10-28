@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+{% block title %}About - EduShield{% endblock %}
+
+{% block header_title %}About EduShield Analytics{% endblock %}
+{% block header_description %}Explore the project overview, objectives, system architecture, and development teams of the EduShield retention platform.{% endblock %}
+
+{% block content %}
+<div class="fade-in-section">
+
+    <!-- Project Description & Objectives -->
+    <div class="row g-4 mb-4">
+        <div class="col-12 col-lg-7">
+            <div class="glass-card p-4 shadow-sm h-100 anim-delay-1">
+                <h5 class="card-title text-secondary"><i class="fas fa-circle-info me-2"></i> Project Description</h5>
+                <p class="text-muted leading-relaxed mt-3" style="font-size: 1.05rem;">
+                    <strong>EduShield</strong> is an AI-powered student retention analytics platform built to assist academic administrators and student counselors in identifying dropout risks. By modeling historical enrollment profiles using machine learning classifiers, EduShield translates complex demographic, socioeconomic, and curricular factors into actionable probabilities, enabling targeted early intervention.
+                </p>
+                <p class="text-muted leading-relaxed mt-2" style="font-size: 1.05rem;">
+                    Developed as a modular, responsive web application, the system integrates data exploration, model validation, and single-student assessment utilities in a unified, production-grade interface.
+                </p>
+            </div>
+        </div>
+        
+        <div class="col-12 col-lg-5">
+            <div class="glass-card p-4 shadow-sm h-100 anim-delay-2">
+                <h5 class="card-title text-purple"><i class="fas fa-bullseye me-2"></i> Core Objectives</h5>
+                <div class="mt-3">
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas fa-check-circle text-success me-3 mt-1" style="font-size: 1.2rem;"></i>
+                        <div>
+                            <h6 class="fw-bold mb-0">Early Warning Alerts</h6>
+                            <p class="text-muted small mb-0">Compute student risk profiles at critical check-points in the first academic year.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas fa-check-circle text-success me-3 mt-1" style="font-size: 1.2rem;"></i>
+                        <div>
+                            <h6 class="fw-bold mb-0">Proactive Guidance</h6>
+                            <p class="text-muted small mb-0">Generate recommended academic and financial interventions based on risk severity.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start">
+                        <i class="fas fa-check-circle text-success me-3 mt-1" style="font-size: 1.2rem;"></i>
+                        <div>
+                            <h6 class="fw-bold mb-0">Data-Driven Insights</h6>
+                            <p class="text-muted small mb-0">Empower academic deans with aggregate cohort diagnostics and trend breakdowns.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Technologies & Machine Learning Algorithms -->
+    <div class="row g-4 mb-4">
+        <!-- Technologies Used -->
+        <div class="col-12 col-md-6">
+            <div class="glass-card p-4 shadow-sm h-100 anim-delay-2">
+                <h5 class="card-title text-accent"><i class="fas fa-microchip me-2"></i> Technologies Used</h5>
+                <div class="row g-3 mt-2">
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded">
+                            <span class="fw-bold text-dark d-block">Flask 3.0</span>
+                            <span class="text-muted small">Backend Controller</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded">
+                            <span class="fw-bold text-dark d-block">SQLite 3</span>
+                            <span class="text-muted small">Database Management</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded">
+                            <span class="fw-bold text-dark d-block">Plotly.js</span>
+                            <span class="text-muted small">Interactive Visualization</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded">
+                            <span class="fw-bold text-dark d-block">ReportLab</span>
+                            <span class="text-muted small">PDF Report Compiler</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded">
+                            <span class="fw-bold text-dark d-block">Bootstrap 5</span>
+                            <span class="text-muted small">Responsive UI Grid</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded">
+                            <span class="fw-bold text-dark d-block">Gunicorn</span>
+                            <span class="text-muted small">Production WSGI Server</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ML Algorithms -->
+        <div class="col-12 col-md-6">
+            <div class="glass-card p-4 shadow-sm h-100 anim-delay-3">
+                <h5 class="card-title text-primary"><i class="fas fa-brain me-2"></i> Machine Learning Algorithms</h5>
+                <div class="mt-3" style="max-height: 250px; overflow-y: auto; padding-right: 5px;">
+                    <div class="mb-2">
+                        <span class="fw-bold text-dark d-block">1. XGBoost Classifier (Deployed)</span>
+                        <p class="text-muted small mb-0">Gradient boosted decision trees utilizing optimized parallel tree learning. Achieved best F1 Score: 80.74%.</p>
+                    </div>
+                    <div class="mb-2">
+                        <span class="fw-bold text-dark d-block">2. Random Forest Classifier</span>
+                        <p class="text-muted small mb-0">Ensemble bagging classifier constructing multiple decision trees to minimize overfitting variance.</p>
+                    </div>
+                    <div class="mb-2">
+                        <span class="fw-bold text-dark d-block">3. Gradient Boosting Classifier</span>
+                        <p class="text-muted small mb-0">Ensemble model building sequential weak decision trees to minimize calculated log-losses.</p>
+                    </div>
+                    <div class="mb-2">
+                        <span class="fw-bold text-dark d-block">4. Logistic Regression</span>
+                        <p class="text-muted small mb-0">Baseline parametric linear classifier modeling student dropout probabilities using a sigmoid function.</p>
+                    </div>
+                    <div class="mb-2">
+                        <span class="fw-bold text-dark d-block">5. Support Vector Machine (SVM)</span>
+                        <p class="text-muted small mb-0">Maximizes margins between hyperplanes to separate classifications. High precision: 90.65%.</p>
+                    </div>
+                    <div class="mb-2">
+                        <span class="fw-bold text-dark d-block">6. K-Nearest Neighbors (KNN)</span>
+                        <p class="text-muted small mb-0">Non-parametric instance-based classifier grouping student points by Euclidean feature distance proximity.</p>
+                    </div>
+                    <div>
+                        <span class="fw-bold text-dark d-block">7. Decision Tree Classifier</span>
+                        <p class="text-muted small mb-0">Splits nodes based on Information Gain/Gini impurity values to generate interpretable flowchart rules.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dataset & System Architecture -->
+    <div class="row g-4 mb-4">
+        <!-- Dataset Info -->
+        <div class="col-12 col-lg-5">
+            <div class="glass-card p-4 shadow-sm h-100 anim-delay-2">
+                <h5 class="card-title text-orange"><i class="fas fa-database me-2"></i> Dataset Information</h5>
+                <p class="text-muted small mt-3" style="line-height: 1.6;">
+                    The platform is modeled on the **"Predict Students' Dropout and Academic Success"** dataset, originally compiled by the **UCI Machine Learning Repository** from an administrative student cohort.
+                </p>
+                <div class="row g-2 mt-2">
+                    <div class="col-6">
+                        <div class="p-2 bg-light rounded text-center">
+                            <span class="text-muted small d-block">Total Records</span>
+                            <span class="fw-bold text-dark">4,424</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 bg-light rounded text-center">
+                            <span class="text-muted small d-block">Features Count</span>
+                            <span class="fw-bold text-dark">35</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 bg-light rounded text-center">
+                            <span class="text-muted small d-block">Missing Values</span>
+                            <span class="fw-bold text-success">0 (Complete)</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 bg-light rounded text-center">
+                            <span class="text-muted small d-block">Deduplication</span>
+                            <span class="fw-bold text-success">0 duplicates</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- System Architecture -->
+        <div class="col-12 col-lg-7">
+            <div class="glass-card p-4 shadow-sm h-100 anim-delay-3">
+                <h5 class="card-title text-secondary"><i class="fas fa-route me-2"></i> System Architecture</h5>
+                <div class="mt-3">
+                    <div class="p-2 bg-light rounded mb-2 border-start border-3 border-primary">
+                        <strong class="d-block small text-dark">1. Client Layer (Presentation)</strong>
+                        <span class="text-muted small">Bootstrap 5 templates with custom responsive glassmorphic CSS rules and Plotly client-side chart drawing.</span>
+                    </div>
+                    <div class="p-2 bg-light rounded mb-2 border-start border-3 border-secondary">
+                        <strong class="d-block small text-dark">2. Routing & Controller Layer (Application)</strong>
+                        <span class="text-muted small">Flask app routes handling auth sessions, prediction submissions, and CSV/PDF report downloads.</span>
+                    </div>
+                    <div class="p-2 bg-light rounded mb-2 border-start border-3 border-accent">
+                        <strong class="d-block small text-dark">3. Data & Inference Layer (Analytics)</strong>
+                        <span class="text-muted small">Pandas loads cohort datasets; joblib deserializes fitted standard scalers and XGBoost classifiers for inference.</span>
+                    </div>
+                    <div class="p-2 bg-light rounded border-start border-3 border-purple">
+                        <strong class="d-block small text-dark">4. Storage Layer (Persistence)</strong>
+                        <span class="text-muted small">SQLite databases containing `users` and `prediction_history` tables.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Developer Information -->
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="glass-card p-4 shadow-sm border-start border-5 border-purple anim-delay-3">
+                <h5 class="card-title text-dark"><i class="fas fa-code me-2"></i> Developer & Institutional Information</h5>
+                <div class="row g-3 mt-2">
+                    <div class="col-12 col-md-6">
+                        <span class="d-block text-muted small fw-bold">Academic Institution</span>
+                        <span class="fw-bold text-dark" style="font-size: 1.1rem;">EduShield Institutional Research Group</span>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <span class="d-block text-muted small fw-bold">AI Engineering Team</span>
+                        <span class="fw-bold text-dark" style="font-size: 1.1rem;">Lead Data Science Specialists</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

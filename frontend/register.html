@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - EduShield</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+<body>
+    <div id="navbar-mount"></div>
+
+    <div class="container py-5 my-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="glass-card p-4 p-md-5 shadow-lg border-0">
+                    <div class="text-center mb-4">
+                        <div class="text-primary mb-3" style="font-size: 3rem;"><i class="fas fa-user-plus"></i></div>
+                        <h3 class="fw-bold font-outfit">Create Account</h3>
+                        <p class="text-muted small">Register a new analyst account on MongoDB Atlas cloud</p>
+                    </div>
+
+                    <div id="registerAlert" class="alert alert-danger d-none" role="alert"></div>
+
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label fw-bold small text-muted">
+                                <i class="fas fa-user me-1"></i> Username
+                            </label>
+                            <input type="text" id="username" class="form-control py-2" placeholder="Choose username" required autofocus>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label fw-bold small text-muted">
+                                <i class="fas fa-envelope me-1"></i> Email Address
+                            </label>
+                            <input type="email" id="email" class="form-control py-2" placeholder="name@university.edu" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label fw-bold small text-muted">
+                                <i class="fas fa-lock me-1"></i> Password
+                            </label>
+                            <input type="password" id="password" class="form-control py-2" placeholder="Create strong password" required minlength="4">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="role" class="form-label fw-bold small text-muted">
+                                <i class="fas fa-user-tag me-1"></i> Access Role
+                            </label>
+                            <select id="role" class="form-select py-2">
+                                <option value="user" selected>Regular Analyst (Advisor Dashboard)</option>
+                                <option value="admin">Platform Administrator (Global Analytics)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" id="registerBtn" class="btn btn-primary w-100 py-3 fw-bold mb-3 shadow-sm rounded-pill">
+                            <i class="fas fa-user-check me-2"></i> Register Account
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-3 border-top pt-3">
+                        <span class="text-muted small">Already registered? </span>
+                        <a href="login.html" class="fw-bold small text-primary text-decoration-none">Log in here</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/nav.js"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('registerBtn');
+            const alertBox = document.getElementById('registerAlert');
+            alertBox.classList.add('d-none');
+
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Creating Account...';
+
+            try {
+                await API.register(username, email, password, role);
+                window.location.href = 'dashboard.html';
+            } catch (err) {
+                alertBox.textContent = err.message || "Registration failed. Please check inputs.";
+                alertBox.classList.remove('d-none');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-user-check me-2"></i> Register Account';
+            }
+        });
+    </script>
+</body>
+</html>

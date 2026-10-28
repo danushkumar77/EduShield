@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - EduShield{% endblock %}
+
+{% block header_title %}Institutional Analytics Dashboard{% endblock %}
+{% block header_description %}Monitor enrollment, dropout rates, academic performance, and financial factors across all cohorts.{% endblock %}
+
+{% block content %}
+<div class="fade-in-section">
+    
+    <!-- KPI Metrics Row -->
+    <div class="row g-4 mb-4">
+        <!-- Card 1: Total Students -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="glass-card kpi-card anim-delay-1">
+                <div class="kpi-details">
+                    <span class="kpi-value">{{ stats.total_students }}</span>
+                    <span class="kpi-label">Total Students</span>
+                    <span class="kpi-trend trend-up">
+                        <i class="fas fa-caret-up"></i> +4.2% <span class="text-muted">vs last year</span>
+                    </span>
+                </div>
+                <div class="kpi-icon-container kpi-blue">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 2: Dropout Rate -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="glass-card kpi-card anim-delay-2">
+                <div class="kpi-details">
+                    <span class="kpi-value">{{ stats.dropout_rate }}%</span>
+                    <span class="kpi-label">Dropout Rate</span>
+                    <span class="kpi-trend trend-down">
+                        <i class="fas fa-caret-down"></i> -1.8% <span class="text-muted">vs last semester</span>
+                    </span>
+                </div>
+                <div class="kpi-icon-container kpi-red">
+                    <i class="fas fa-user-slash"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 3: Graduate Rate -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="glass-card kpi-card anim-delay-3">
+                <div class="kpi-details">
+                    <span class="kpi-value">{{ stats.graduate_rate }}%</span>
+                    <span class="kpi-label">Graduate Rate</span>
+                    <span class="kpi-trend trend-up">
+                        <i class="fas fa-caret-up"></i> +2.3% <span class="text-muted">vs average</span>
+                    </span>
+                </div>
+                <div class="kpi-icon-container kpi-green">
+                    <i class="fas fa-award"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 4: Model Accuracy -->
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="glass-card kpi-card anim-delay-4">
+                <div class="kpi-details">
+                    <span class="kpi-value">{{ stats.model_accuracy }}%</span>
+                    <span class="kpi-label">Prediction Accuracy</span>
+                    <span class="kpi-trend trend-up">
+                        <i class="fas fa-check-circle"></i> Best Model <span class="text-muted">active</span>
+                    </span>
+                </div>
+                <div class="kpi-icon-container kpi-orange">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 1 -->
+    <div class="row g-4 mb-4">
+        <!-- Chart 1: Dropout Distribution -->
+        <div class="col-12 col-lg-6">
+            <div class="glass-card anim-delay-2">
+                <h5 class="card-title">
+                    <i class="fas fa-chart-pie"></i> Student Retention Distribution
+                </h5>
+                <div id="dropout-dist-chart" class="chart-container">
+                    <div class="chart-placeholder-info">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading retention data...</p>
+                    </div>
+                </div>
+                <div class="mt-3 p-3 bg-light rounded border-start border-4 border-primary">
+                    <strong><i class="fas fa-lightbulb text-warning"></i> Key Analytics Insight:</strong>
+                    <p class="mb-0 mt-1 text-muted small">
+                        Approximately 32.1% (1,421 students) are classified as "Dropout", representing a significant retention challenge. 
+                        Graduates make up the largest segment (49.9%), while Enrolled students (18.0%) are still active and require targeted 
+                        preventative monitoring.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Chart 2: Course-wise Dropout Rate -->
+        <div class="col-12 col-lg-6">
+            <div class="glass-card anim-delay-3">
+                <h5 class="card-title">
+                    <i class="fas fa-chart-bar"></i> Department-wise Dropout Risk
+                </h5>
+                <div id="dept-dropout-chart" class="chart-container">
+                    <div class="chart-placeholder-info">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading course-wise statistics...</p>
+                    </div>
+                </div>
+                <div class="mt-3 p-3 bg-light rounded border-start border-4 border-warning">
+                    <strong><i class="fas fa-lightbulb text-warning"></i> Key Analytics Insight:</strong>
+                    <p class="mb-0 mt-1 text-muted small">
+                        Technical courses like <em>Biofuel Production Technologies</em> and <em>Informatics Engineering</em> 
+                        suffer from high attrition rates (exceeding 50%). Conversely, vocational health programs like <em>Nursing</em> 
+                        exhibit high retention, showing a dropout rate of only 18.2%.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 2 -->
+    <div class="row g-4">
+        <!-- Chart 3: Scholarship Impact -->
+        <div class="col-12 col-lg-6">
+            <div class="glass-card anim-delay-3">
+                <h5 class="card-title">
+                    <i class="fas fa-hand-holding-dollar"></i> Scholarship Support Retention Analysis
+                </h5>
+                <div id="scholarship-chart" class="chart-container">
+                    <div class="chart-placeholder-info">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading financial support correlations...</p>
+                    </div>
+                </div>
+                <div class="mt-3 p-3 bg-light rounded border-start border-4 border-success">
+                    <strong><i class="fas fa-lightbulb text-warning"></i> Key Analytics Insight:</strong>
+                    <p class="mb-0 mt-1 text-muted small">
+                        Financial support strongly correlates with academic persistence: scholarship holders demonstrate a retention 
+                        rate of 86.5%, whereas non-holders drop out at more than triple the rate (44.8%). Financial aid represents a highly 
+                        effective lever for improving retention metrics.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Chart 4: Academic Performance -->
+        <div class="col-12 col-lg-6">
+            <div class="glass-card anim-delay-4">
+                <h5 class="card-title">
+                    <i class="fas fa-chart-scatter"></i> 1st Semester Performance vs Retention
+                </h5>
+                <div id="semester-perf-chart" class="chart-container">
+                    <div class="chart-placeholder-info">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading academic performance trends...</p>
+                    </div>
+                </div>
+                <div class="mt-3 p-3 bg-light rounded border-start border-4 border-info">
+                    <strong><i class="fas fa-lightbulb text-warning"></i> Key Analytics Insight:</strong>
+                    <p class="mb-0 mt-1 text-muted small">
+                        First-semester academic performance is the strongest early-warning indicator. Students who complete fewer than 
+                        3 credits or fall below an average grade of 10.0 out of 20.0 fall squarely into the high-risk cluster, 
+                        making credit completion critical within the first 6 months.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

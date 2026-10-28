@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Benchmarks - EduShield</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+</head>
+<body>
+    <div id="navbar-mount"></div>
+
+    <div class="container py-4">
+        <!-- Header -->
+        <div class="row g-4 mb-4">
+            <div class="col-12">
+                <div class="glass-card p-4 border-start border-5 border-success shadow-sm d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                    <div>
+                        <span class="badge bg-success rounded-pill px-3 py-1 mb-2">
+                            <i class="fas fa-crown text-warning me-1"></i> Auto-Selected Best Model
+                        </span>
+                        <h3 class="fw-bold font-outfit mb-1" id="bestModelTitle">XGBoost Classifier</h3>
+                        <p class="text-muted small mb-0">Evaluated on 4,424 student cohort records with 80:20 train-test validation.</p>
+                    </div>
+                    <div class="mt-3 mt-md-0 d-flex gap-3 text-center">
+                        <div class="p-3 bg-light rounded text-center" style="min-width: 100px;">
+                            <span class="d-block text-muted small">Accuracy</span>
+                            <h4 class="fw-bold mb-0 text-success">88.25%</h4>
+                        </div>
+                        <div class="p-3 bg-light rounded text-center" style="min-width: 100px;">
+                            <span class="d-block text-muted small">F1-Score</span>
+                            <h4 class="fw-bold mb-0 text-primary">80.74%</h4>
+                        </div>
+                        <div class="p-3 bg-light rounded text-center" style="min-width: 100px;">
+                            <span class="d-block text-muted small">ROC-AUC</span>
+                            <h4 class="fw-bold mb-0 text-info">92.64%</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparative Plotly Chart -->
+        <div class="row g-4 mb-4">
+            <div class="col-12">
+                <div class="glass-card p-4 shadow-sm">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-chart-simple text-primary me-2"></i>Multi-Classifier Performance Comparison</h5>
+                    <div id="benchmarkChart" style="height: 380px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confusion Matrix & ROC Curve -->
+        <div class="row g-4 mb-4">
+            <div class="col-12 col-md-6">
+                <div class="glass-card p-4 shadow-sm h-100">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-table-cells text-primary me-2"></i>Confusion Matrix (XGBoost)</h5>
+                    <div id="confusionMatrix" style="height: 300px;"></div>
+                    <div class="p-2 bg-light rounded text-center small text-muted mt-2">
+                        True Negatives: <strong>493</strong> | False Positives: <strong>25</strong> | False Negatives: <strong>66</strong> | True Positives: <strong>218</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="glass-card p-4 shadow-sm h-100">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-wave-square text-accent me-2"></i>ROC Curve (AUC: 92.64%)</h5>
+                    <div id="rocCurve" style="height: 300px;"></div>
+                    <div class="p-2 bg-light rounded text-center small text-muted mt-2">
+                        XGBoost shows outstanding discrimination capability between dropout and retained students.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Full Metrics Comparison Table -->
+        <div class="row g-4 mb-4">
+            <div class="col-12">
+                <div class="glass-card p-4 shadow-sm">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-list-check text-primary me-2"></i>Classifier Benchmark Leaderboard</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Algorithm</th>
+                                    <th>Accuracy</th>
+                                    <th>Precision</th>
+                                    <th>Recall</th>
+                                    <th>F1-Score</th>
+                                    <th>ROC-AUC</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modelsTableBody">
+                                <tr>
+                                    <td colspan="8" class="text-center py-4 text-muted"><i class="fas fa-spinner fa-spin me-2"></i>Loading benchmarks...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/nav.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const res = await API.getModels();
+                const models = res.models || [];
+                const tbody = document.getElementById('modelsTableBody');
+
+                tbody.innerHTML = models.map((m, idx) => `
+                    <tr class="${m.is_best ? 'table-success-subtle fw-bold' : ''}">
+                        <td>#${idx + 1}</td>
+                        <td>${m.name}</td>
+                        <td>${m.accuracy}%</td>
+                        <td>${m.precision}%</td>
+                        <td>${m.recall}%</td>
+                        <td><span class="badge ${m.is_best ? 'bg-primary' : 'bg-light text-dark border'} rounded-pill">${m.f1_score}%</span></td>
+                        <td>${m.roc_auc}%</td>
+                        <td>
+                            ${m.is_best ? '<span class="badge bg-success rounded-pill px-3 py-1"><i class="fas fa-check me-1"></i>Active Engine</span>' : '<span class="badge bg-light text-muted border rounded-pill">Evaluated</span>'}
+                        </td>
+                    </tr>
+                `).join('');
+
+                // Render Benchmark Chart
+                const names = models.map(m => m.name.replace(' Classifier', ''));
+                const accs = models.map(m => m.accuracy);
+                const f1s = models.map(m => m.f1_score);
+                const rocs = models.map(m => m.roc_auc);
+
+                const traceAcc = { x: names, y: accs, name: 'Accuracy', type: 'bar', marker: { color: '#2563eb' } };
+                const traceF1 = { x: names, y: f1s, name: 'F1-Score', type: 'bar', marker: { color: '#7c3aed' } };
+                const traceRoc = { x: names, y: rocs, name: 'ROC-AUC', type: 'bar', marker: { color: '#0ea5e9' } };
+
+                Plotly.newPlot('benchmarkChart', [traceAcc, traceF1, traceRoc], {
+                    barmode: 'group',
+                    margin: { t: 20, b: 60, l: 40, r: 20 },
+                    paper_bgcolor: 'transparent',
+                    plot_bgcolor: 'transparent',
+                    yaxis: { range: [60, 100], title: 'Percentage (%)' },
+                    xaxis: { tickangle: -20 },
+                    legend: { orientation: 'h', y: 1.15 }
+                }, { responsive: true, displayModeBar: false });
+
+                // Render Confusion Matrix
+                const cmData = [{
+                    z: [[493, 25], [66, 218]],
+                    x: ['Pred: Retained', 'Pred: Dropout'],
+                    y: ['Actual: Retained', 'Actual: Dropout'],
+                    type: 'heatmap',
+                    colorscale: 'Blues',
+                    showscale: false
+                }];
+                Plotly.newPlot('confusionMatrix', cmData, {
+                    margin: { t: 20, b: 40, l: 120, r: 20 },
+                    paper_bgcolor: 'transparent',
+                    annotations: [
+                        { text: 'TN: 493', x: 0, y: 0, showarrow: false, font: { color: 'white', size: 14 } },
+                        { text: 'FP: 25', x: 1, y: 0, showarrow: false, font: { color: 'black', size: 14 } },
+                        { text: 'FN: 66', x: 0, y: 1, showarrow: false, font: { color: 'black', size: 14 } },
+                        { text: 'TP: 218', x: 1, y: 1, showarrow: false, font: { color: 'white', size: 14 } }
+                    ]
+                }, { responsive: true, displayModeBar: false });
+
+                // Render ROC Curve
+                const rocTrace = {
+                    x: [0, 0.05, 0.1, 0.2, 0.4, 0.7, 1.0],
+                    y: [0, 0.65, 0.78, 0.88, 0.94, 0.98, 1.0],
+                    mode: 'lines+markers',
+                    name: 'XGBoost (AUC = 0.926)',
+                    line: { color: '#2563eb', width: 3 }
+                };
+                const randomGuess = {
+                    x: [0, 1], y: [0, 1],
+                    mode: 'lines',
+                    name: 'Random Guess',
+                    line: { dash: 'dash', color: '#94a3b8' }
+                };
+                Plotly.newPlot('rocCurve', [rocTrace, randomGuess], {
+                    margin: { t: 20, b: 40, l: 40, r: 20 },
+                    paper_bgcolor: 'transparent',
+                    plot_bgcolor: 'transparent',
+                    xaxis: { title: 'False Positive Rate' },
+                    yaxis: { title: 'True Positive Rate' },
+                    legend: { orientation: 'h', y: -0.2 }
+                }, { responsive: true, displayModeBar: false });
+
+            } catch (err) {
+                console.error("Models load failed:", err);
+            }
+        });
+    </script>
+</body>
+</html>

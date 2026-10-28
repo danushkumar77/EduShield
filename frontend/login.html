@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In - EduShield</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+<body>
+    <div id="navbar-mount"></div>
+
+    <div class="container py-5 my-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-5">
+                <div class="glass-card p-4 p-md-5 shadow-lg border-0">
+                    <div class="text-center mb-4">
+                        <div class="text-primary mb-3" style="font-size: 3rem;"><i class="fas fa-user-shield"></i></div>
+                        <h3 class="fw-bold font-outfit">Platform Log In</h3>
+                        <p class="text-muted small">Access your academic retention analytics dashboard</p>
+                    </div>
+
+                    <div id="loginAlert" class="alert alert-danger d-none" role="alert"></div>
+
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label fw-bold small text-muted">
+                                <i class="fas fa-user me-1"></i> Username
+                            </label>
+                            <input type="text" id="username" class="form-control py-2" placeholder="Enter username" required autofocus>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label fw-bold small text-muted">
+                                <i class="fas fa-lock me-1"></i> Password
+                            </label>
+                            <input type="password" id="password" class="form-control py-2" placeholder="Enter password" required>
+                        </div>
+
+                        <button type="submit" id="loginSubmitBtn" class="btn btn-primary w-100 py-3 fw-bold mb-3 shadow-sm rounded-pill">
+                            <i class="fas fa-right-to-bracket me-2"></i> Log In
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-3 border-top pt-3">
+                        <span class="text-muted small">Don't have an account? </span>
+                        <a href="register.html" class="fw-bold small text-primary text-decoration-none">Create Account</a>
+                    </div>
+
+                    <!-- Quick 1-Click Credentials -->
+                    <div class="mt-4 p-3 rounded border" style="background: rgba(14, 165, 233, 0.06); border-left: 4px solid var(--color-accent) !important;">
+                        <span class="d-block fw-bold small text-dark"><i class="fas fa-bolt text-accent me-1"></i> Quick 1-Click Login:</span>
+                        <div class="d-flex gap-2 mt-2">
+                            <button class="btn btn-sm btn-outline-primary py-1 px-2 rounded-pill small" onclick="fillCreds('admin', 'admin123')">
+                                Admin Demo
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary py-1 px-2 rounded-pill small" onclick="fillCreds('user', 'user123')">
+                                Advisor Demo
+                            </button>
+                            <button class="btn btn-sm btn-outline-dark py-1 px-2 rounded-pill small" onclick="fillCreds('danush', '')">
+                                danush
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/nav.js"></script>
+    <script>
+        function fillCreds(u, p) {
+            document.getElementById('username').value = u;
+            document.getElementById('password').value = p;
+            if (p) document.getElementById('loginForm').requestSubmit();
+            else document.getElementById('password').focus();
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('loginSubmitBtn');
+            const alertBox = document.getElementById('loginAlert');
+            alertBox.classList.add('d-none');
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Authenticating...';
+
+            try {
+                await API.login(username, password);
+                const params = new URLSearchParams(window.location.search);
+                const redirect = params.get('redirect') || 'dashboard.html';
+                window.location.href = redirect;
+            } catch (err) {
+                alertBox.textContent = err.message || "Invalid username or password.";
+                alertBox.classList.remove('d-none');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-right-to-bracket me-2"></i> Log In';
+            }
+        });
+    </script>
+</body>
+</html>

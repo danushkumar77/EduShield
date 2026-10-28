@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Feature Importance - EduShield{% endblock %}
+
+{% block header_title %}Top Predictive Feature Weights{% endblock %}
+{% block header_description %}Explore the structural parameters contributing most significantly to the XGBoost model's dropout predictions.{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-4">
+    <!-- Chart Column -->
+    <div class="col-12 col-xl-7">
+        <div class="glass-card p-4 shadow-sm h-100 anim-delay-1">
+            <h5 class="card-title"><i class="fas fa-chart-bar text-purple me-2"></i> XGBoost Feature Importance Weights</h5>
+            <div class="text-center p-3 mt-3">
+                <img src="{{ url_for('static', filename='images/feature_importance.png') }}" class="img-fluid rounded shadow-sm" alt="Feature Importance Chart" style="max-height: 400px; border: 1px solid var(--border-color);">
+            </div>
+            <div class="mt-4 p-3 bg-light rounded border-start border-4 border-purple small text-muted">
+                <strong><i class="fas fa-circle-info text-purple"></i> Feature Interpretation:</strong>
+                <p class="mb-0 mt-1">
+                    Features are ranked by their <strong>weight</strong> coefficients within the trained decision trees. Academic indicators (credits completed) and financial statuses (tuition compliance) dominate prediction weights, explaining over 75% of model decisions.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Table Column -->
+    <div class="col-12 col-xl-5">
+        <div class="glass-card p-4 shadow-sm h-100 anim-delay-2">
+            <h5 class="card-title mb-4"><i class="fas fa-list-ol text-secondary me-2"></i> Top 15 Ranked Variables</h5>
+            <div class="table-responsive">
+                <table class="custom-table" style="font-size: 0.9rem;">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%">Rank</th>
+                            <th style="width: 60%">Feature Column Name</th>
+                            <th style="width: 30%">Weight</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if features %}
+                            {% for feat in features[:15] %}
+                            <tr>
+                                <td class="fw-bold text-center">#{{ loop.index }}</td>
+                                <td class="fw-bold">{{ feat.feature }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <span class="fw-bold me-2">{{ "%.4f"|format(feat.importance) }}</span>
+                                        <div class="progress w-100 d-none d-sm-flex" style="height: 6px; border-radius: 3px;">
+                                            <div class="progress-bar bg-purple" role="progressbar" style="width: {{ feat.importance * 100 }}%;" aria-valuenow="{{ feat.importance * 100 }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="3" class="text-center py-4 text-muted">No feature importance weights loaded.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Explanations of Feature Categories -->
+<div class="row g-4 mb-4">
+    <div class="col-12">
+        <div class="glass-card p-4 shadow-sm anim-delay-3">
+            <h5 class="card-title mb-3"><i class="fas fa-brain text-accent me-2"></i> How These Features Contribute to Dropout Predictions</h5>
+            <div class="row g-4 mt-1">
+                <div class="col-12 col-md-4">
+                    <div class="p-3 bg-light rounded h-100 border-start border-4 border-success">
+                        <h6 class="fw-bold text-success"><i class="fas fa-graduation-cap me-2"></i> Academic Performance</h6>
+                        <p class="text-muted small mb-0 mt-1" style="line-height: 1.6;">
+                            Approved credit units in 1st & 2nd semesters represent the student's ability to cope with curriculum requirements. A drop in approved credits below 3 units in the first year indicates immediate risk of academic withdrawal.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="p-3 bg-light rounded h-100 border-start border-4 border-danger">
+                        <h6 class="fw-bold text-danger"><i class="fas fa-wallet me-2"></i> Financial Compliance</h6>
+                        <p class="text-muted small mb-0 mt-1" style="line-height: 1.6;">
+                            Whether a student's tuition fees are up-to-date is a crucial indicator. Debtor status is highly weighted, showing that financial stress and late tuition payments are primary non-academic triggers for dropping out.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="p-3 bg-light rounded h-100 border-start border-4 border-primary">
+                        <h6 class="fw-bold text-primary"><i class="fas fa-users-rectangle me-2"></i> Socio-Demographics</h6>
+                        <p class="text-muted small mb-0 mt-1" style="line-height: 1.6;">
+                            Age at enrollment (older non-traditional students show higher dropout statistics) and Scholarship Status (acting as a major protection factor) represent key weights that adjust prediction probability.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

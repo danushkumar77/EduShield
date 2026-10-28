@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+
+{% block title %}Risk Prediction - EduShield{% endblock %}
+
+{% block header_title %}Student Dropout Risk Assessment{% endblock %}
+{% block header_description %}Enter student background and academic records to compute real-time dropout risk probabilities and get action recommendations.{% endblock %}
+
+{% block content %}
+<div class="fade-in-section prediction-form-wrapper">
+
+    <div class="row g-4">
+        <!-- Input Form Card -->
+        <div class="col-12 col-xl-8">
+            <div class="glass-card anim-delay-1">
+                <h5 class="card-title">
+                    <i class="fas fa-clipboard-user"></i> Student Academic & Socioeconomic Profile Form
+                </h5>
+                <form id="prediction-form" action="{{ url_for('predict') }}" method="POST">
+                    
+                    <!-- Optional Identification -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="student_name" class="form-label fw-bold small text-muted"><i class="fas fa-user me-1"></i> Student Name (Optional)</label>
+                            <input type="text" name="student_name" id="student_name" class="form-control" placeholder="Enter student name (e.g. John Doe)" style="border-radius: var(--radius-sm);">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="student_id" class="form-label fw-bold small text-muted"><i class="fas fa-id-card me-1"></i> Student ID (Optional)</label>
+                            <input type="text" name="student_id" id="student_id" class="form-control" placeholder="Enter student ID (e.g. STU-2026-042)" style="border-radius: var(--radius-sm);">
+                        </div>
+                    </div>
+                    
+                    <!-- Section 1: Demographic Info -->
+                    <div class="form-section-title">
+                        <i class="fas fa-user-circle"></i> Demographic Information
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6 col-lg-3">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select name="gender" id="gender" class="form-select" required>
+                                <option value="0">Female</option>
+                                <option value="1">Male</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <label for="age" class="form-label">Age at Enrollment</label>
+                            <input type="number" name="age" id="age" class="form-control" min="15" max="100" value="19" required>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <label for="marital" class="form-label">Marital Status</label>
+                            <select name="marital" id="marital" class="form-select" required>
+                                <option value="1">Single</option>
+                                <option value="2">Married</option>
+                                <option value="4">Divorced</option>
+                                <option value="5">Facto Union</option>
+                                <option value="3">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <label for="nationality" class="form-label">Nationality</label>
+                            <select name="nationality" id="nationality" class="form-select" required>
+                                <option value="1">Portuguese</option>
+                                <option value="14">Brazilian</option>
+                                <option value="2">Spanish</option>
+                                <option value="1">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Socioeconomic & Background -->
+                    <div class="form-section-title">
+                        <i class="fas fa-hand-holding-dollar"></i> Socioeconomic & Entry Background
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6 col-lg-4">
+                            <label for="scholarship" class="form-label">Scholarship Holder</label>
+                            <select name="scholarship" id="scholarship" class="form-select" required>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <label for="debtor" class="form-label">Debtor (Owes Tuition)</label>
+                            <select name="debtor" id="debtor" class="form-select" required>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <label for="tuition_ok" class="form-label">Tuition Fees Up to Date</label>
+                            <select name="tuition_ok" id="tuition_ok" class="form-select" required>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 col-lg-4">
+                            <label for="app_mode" class="form-label">Application Mode</label>
+                            <select name="app_mode" id="app_mode" class="form-select" required>
+                                <option value="17">Standardized national exam</option>
+                                <option value="1">1st phase - general contingent</option>
+                                <option value="18">Over 23 years old</option>
+                                <option value="43">Transfer / Course Change</option>
+                                <option value="2">Holders of other higher degrees</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <label for="prev_qual" class="form-label">Previous Qualification</label>
+                            <select name="prev_qual" id="prev_qual" class="form-select" required>
+                                <option value="1">Secondary Education - 12th year</option>
+                                <option value="3">Higher Education (Degree)</option>
+                                <option value="19">Basic Education (3rd cycle)</option>
+                                <option value="1">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <label for="admission_grade" class="form-label">Admission Grade (0 - 200)</label>
+                            <input type="number" step="0.1" name="admission_grade" id="admission_grade" class="form-control" min="0" max="200" value="125.4" required>
+                        </div>
+
+                        <!-- Parental Info -->
+                        <div class="col-md-6 col-lg-3">
+                            <label for="mother_qual" class="form-label">Mother's Qualification</label>
+                            <select name="mother_qual" id="mother_qual" class="form-select" required>
+                                <option value="1">Secondary Education</option>
+                                <option value="3">Higher Education - Degree</option>
+                                <option value="19">Basic Education</option>
+                                <option value="37">No Formal Education</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <label for="father_qual" class="form-label">Father's Qualification</label>
+                            <select name="father_qual" id="father_qual" class="form-select" required>
+                                <option value="1">Secondary Education</option>
+                                <option value="3">Higher Education - Degree</option>
+                                <option value="19">Basic Education</option>
+                                <option value="37">No Formal Education</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <label for="mother_occ" class="form-label">Mother's Occupation</label>
+                            <select name="mother_occ" id="mother_occ" class="form-select" required>
+                                <option value="10">Unskilled Worker</option>
+                                <option value="1">Administrative Staff</option>
+                                <option value="2">Technical & Scientific Staff</option>
+                                <option value="3">Personal Service Worker</option>
+                                <option value="99">Unemployed</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <label for="father_occ" class="form-label">Father's Occupation</label>
+                            <select name="father_occ" id="father_occ" class="form-select" required>
+                                <option value="10">Unskilled Worker</option>
+                                <option value="1">Administrative Staff</option>
+                                <option value="2">Technical & Scientific Staff</option>
+                                <option value="3">Personal Service Worker</option>
+                                <option value="99">Unemployed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Academic Record -->
+                    <div class="form-section-title">
+                        <i class="fas fa-graduation-cap"></i> Academic Performance (Curricular Units)
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-12 col-md-4">
+                            <label for="course" class="form-label">Enrolled Course</label>
+                            <select name="course" id="course" class="form-select" required>
+                                <option value="9500">Nursing</option>
+                                <option value="9147">Management</option>
+                                <option value="9238">Social Service</option>
+                                <option value="9119">Informatics Engineering</option>
+                                <option value="9070">Communication Design</option>
+                                <option value="9853">Basic Education</option>
+                                <option value="9254">Tourism</option>
+                            </select>
+                        </div>
+                        
+                        <!-- 1st Semester -->
+                        <div class="col-6 col-md-4">
+                            <label for="sem1_credits" class="form-label">1st Sem Credits Approved</label>
+                            <input type="number" name="sem1_credits" id="sem1_credits" class="form-control" min="0" max="30" value="6" required>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <label for="sem1_grade" class="form-label">1st Sem Grade (0 - 20)</label>
+                            <input type="number" step="0.01" name="sem1_grade" id="sem1_grade" class="form-control" min="0" max="20" value="13.2" required>
+                        </div>
+                        
+                        <!-- 2nd Semester -->
+                        <div class="col-6 offset-md-4 col-md-4">
+                            <label for="sem2_credits" class="form-label">2nd Sem Credits Approved</label>
+                            <input type="number" name="sem2_credits" id="sem2_credits" class="form-control" min="0" max="30" value="6" required>
+                        </div>
+                        <div class="col-6 col-md-4">
+                            <label for="sem2_grade" class="form-label">2nd Sem Grade (0 - 20)</label>
+                            <input type="number" step="0.01" name="sem2_grade" id="sem2_grade" class="form-control" min="0" max="20" value="12.8" required>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Macroeconomic Indexes -->
+                    <div class="form-section-title">
+                        <i class="fas fa-earth-americas"></i> Macroeconomic Indicators
+                    </div>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label for="unemployment" class="form-label">Unemployment Rate (%)</label>
+                            <input type="number" step="0.1" name="unemployment" id="unemployment" class="form-control" value="12.4" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="inflation" class="form-label">Inflation Rate (%)</label>
+                            <input type="number" step="0.1" name="inflation" id="inflation" class="form-control" value="2.8" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="gdp" class="form-label">GDP Growth Rate (%)</label>
+                            <input type="number" step="0.1" name="gdp" id="gdp" class="form-control" value="1.74" required>
+                        </div>
+                    </div>
+
+                    <!-- Predict button -->
+                    <button type="submit" class="btn-predict">
+                        <i class="fas fa-brain me-2"></i> Run Dropout Risk Assessment
+                    </button>
+                    
+                </form>
+            </div>
+        </div>
+
+        <!-- Output Panel (AJAX/Post updates) -->
+        <div class="col-12 col-xl-4">
+            <div id="prediction-results-panel" class="glass-card results-card anim-delay-2 {% if not result %}d-none{% endif %}">
+                <!-- Banner for risk alert -->
+                <div id="res-risk-banner" class="risk-alert-banner 
+                    {% if result %}{% if result.risk_level == 'High' %}risk-high{% elif result.risk_level == 'Medium' %}risk-medium{% else %}risk-low{% endif %}{% endif %}">
+                    {% if result %}
+                        {% if result.risk_level == 'High' %}
+                            <i class="fas fa-exclamation-triangle"></i> High Risk Level Assessment
+                        {% elif result.risk_level == 'Medium' %}
+                            <i class="fas fa-exclamation-circle"></i> Medium Risk Level Assessment
+                        {% else %}
+                            <i class="fas fa-check-circle"></i> Low Risk Level Assessment
+                        {% endif %}
+                    {% endif %}
+                </div>
+
+                <!-- Classification Status -->
+                <div class="text-center mb-4">
+                    <h6 class="text-uppercase text-muted small fw-bold">Retention Prediction</h6>
+                    <h3 id="res-classification" class="{% if result %}{% if result.prediction == 'At Risk' %}text-danger{% else %}text-success{% endif %}{% endif %} fw-bold">
+                        {% if result %}{{ result.prediction }}{% endif %}
+                    </h3>
+                </div>
+
+                <!-- Gauge Container -->
+                <div class="d-flex justify-content-center mb-4">
+                    <div id="risk-gauge-container">
+                        {% if result %}
+                            <!-- Plotly gauge will render here -->
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Prob / Confidence Metrics -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <div class="result-metric-box">
+                            <div id="res-probability" class="result-metric-val">
+                                {% if result %}{{ (result.probability * 100)|round|int }}%{% endif %}
+                            </div>
+                            <div class="result-metric-label">Probability</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="result-metric-box">
+                            <div id="res-confidence" class="result-metric-val">
+                                {% if result %}{{ result.confidence }}%{% endif %}
+                            </div>
+                            <div class="result-metric-label">Model Conf.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommendations list -->
+                <div class="recs-wrapper">
+                    <h6 class="fw-bold mb-3"><i class="fas fa-list-check me-2"></i>Recommended Interventions:</h6>
+                    <ul id="res-recommendations" class="recs-list">
+                        {% if result %}
+                            {% for rec in result.recommendations %}
+                                <li><i class="fas fa-chevron-right"></i> {{ rec }}</li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Default side instruction before calculation -->
+            <div id="form-help-card" class="glass-card text-center p-4 anim-delay-2 {% if result %}d-none{% endif %}">
+                <i class="fas fa-circle-question text-muted mb-3" style="font-size: 3rem; opacity: 0.5;"></i>
+                <h5 class="fw-bold">Assessment Panel</h5>
+                <p class="text-muted small">
+                    Fill out the student's profile form in detail and trigger the model prediction. 
+                    The assessment engine will analyze variables using the trained AI classifier to yield:
+                </p>
+                <div class="text-start mt-3 ps-3">
+                    <p class="mb-2 small"><i class="fas fa-shield text-secondary me-2"></i> Binary Classification (At Risk vs Clean)</p>
+                    <p class="mb-2 small"><i class="fas fa-percent text-secondary me-2"></i> Likelihood Probability Score</p>
+                    <p class="mb-2 small"><i class="fas fa-triangle-exclamation text-secondary me-2"></i> Risk Threshold Categorization</p>
+                    <p class="mb-0 small"><i class="fas fa-wand-magic-sparkles text-secondary me-2"></i> Targeted Retention Actions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if result %}
+<script>
+    // If Flask renders the page directly via standard POST, initialize the gauge immediately
+    document.addEventListener('DOMContentLoaded', function() {
+        const prob = parseFloat("{{ result.probability }}");
+        const risk = "{{ result.risk_level }}";
+        displayPredictionResults({
+            prediction: "{{ result.prediction }}",
+            probability: prob,
+            confidence: "{{ result.confidence }}",
+            risk_level: risk,
+            recommendations: [
+                {% for rec in result.recommendations %}
+                    "{{ rec }}",
+                {% endfor %}
+            ]
+        });
+    });
+</script>
+{% endif %}
+{% endblock %}

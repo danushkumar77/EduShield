@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Interactive EDA - EduShield{% endblock %}
+
+{% block header_title %}Interactive Exploratory Data Analysis{% endblock %}
+{% block header_description %}Explore demographic indicators, socioeconomic attributes, and academic grade distributions in the student retention cohort.{% endblock %}
+
+{% block content %}
+<!-- Grid of Interactive Plots -->
+<div class="row g-4 mb-4">
+    <!-- 1. Target Distribution (Pie) -->
+    <div class="col-12 col-lg-6">
+        <div class="glass-card p-4 shadow-sm h-100 anim-delay-1">
+            <h5 class="fw-bold mb-3"><i class="fas fa-chart-pie text-secondary me-2"></i> Target Retention Distribution</h5>
+            <div id="chart-target" class="chart-container" style="min-height: 350px;"></div>
+            <div class="p-3 bg-light rounded border-start border-4 border-primary mt-3 small text-muted">
+                <strong><i class="fas fa-lightbulb text-warning me-1"></i> Target Distribution Insight:</strong>
+                <p class="mb-0 mt-1">
+                    The cohort is split: 49.9% have successfully graduated, while 32.1% have dropped out. The remaining 18.0% represent currently enrolled students. Our models evaluate dropout (At Risk) vs graduate/enrolled (Safe).
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 2. Gender Distribution -->
+    <div class="col-12 col-lg-6">
+        <div class="glass-card p-4 shadow-sm h-100 anim-delay-2">
+            <h5 class="fw-bold mb-3"><i class="fas fa-venus-mars text-primary me-2"></i> Gender Distribution vs Retention</h5>
+            <div id="chart-gender" class="chart-container" style="min-height: 350px;"></div>
+            <div class="p-3 bg-light rounded border-start border-4 border-secondary mt-3 small text-muted">
+                <strong><i class="fas fa-lightbulb text-warning me-1"></i> Gender Retention Insight:</strong>
+                <p class="mb-0 mt-1">
+                    Male students (1) show a significantly higher dropout rate (approx. 45% of male enrollment) compared to female students (0) (approx. 25% of female enrollment). Gender acts as a key demographic risk flag.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- 3. Scholarship Analysis -->
+    <div class="col-12 col-lg-6">
+        <div class="glass-card p-4 shadow-sm h-100 anim-delay-2">
+            <h5 class="fw-bold mb-3"><i class="fas fa-award text-success me-2"></i> Scholarship Status vs Retention</h5>
+            <div id="chart-scholarship" class="chart-container" style="min-height: 350px;"></div>
+            <div class="p-3 bg-light rounded border-start border-4 border-success mt-3 small text-muted">
+                <strong><i class="fas fa-lightbulb text-warning me-1"></i> Scholarship Insight:</strong>
+                <p class="mb-0 mt-1">
+                    Scholarship holders have a remarkably high graduation rate (nearly 75%). Conversely, non-scholarship holders are 3x more likely to drop out. Direct financial aid acts as a powerful protective driver.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 4. Admission Grade Distribution -->
+    <div class="col-12 col-lg-6">
+        <div class="glass-card p-4 shadow-sm h-100 anim-delay-3">
+            <h5 class="fw-bold mb-3"><i class="fas fa-percent text-accent me-2"></i> Admission Grade Outliers & Distribution</h5>
+            <div id="chart-admission" class="chart-container" style="min-height: 350px;"></div>
+            <div class="p-3 bg-light rounded border-start border-4 border-accent mt-3 small text-muted">
+                <strong><i class="fas fa-lightbulb text-warning me-1"></i> Admission Grade Insight:</strong>
+                <p class="mb-0 mt-1">
+                    Students with higher entry exam scores are statistically clustered in the graduate group. Average admission grades show a clear distinction: graduates average 128/200 vs dropouts averaging 121/200.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- 5. Age Distribution -->
+    <div class="col-12 col-lg-6">
+        <div class="glass-card p-4 shadow-sm h-100 anim-delay-2">
+            <h5 class="fw-bold mb-3"><i class="fas fa-clock text-purple me-2"></i> Student Age at Enrollment</h5>
+            <div id="chart-age" class="chart-container" style="min-height: 350px;"></div>
+            <div class="p-3 bg-light rounded border-start border-4 border-purple mt-3 small text-muted">
+                <strong><i class="fas fa-lightbulb text-warning me-1"></i> Age Retention Insight:</strong>
+                <p class="mb-0 mt-1">
+                    Older students (ages 25-50+) are highly correlated with attrition. Traditional students entering right after secondary school (ages 18-20) present much lower dropout probabilities.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 6. Course-wise Dropout Analysis -->
+    <div class="col-12 col-lg-6">
+        <div class="glass-card p-4 shadow-sm h-100 anim-delay-3">
+            <h5 class="fw-bold mb-3"><i class="fas fa-graduation-cap text-orange me-2"></i> Course-wise Enrollment Attrition Split</h5>
+            <div id="chart-course" class="chart-container" style="min-height: 350px;"></div>
+            <div class="p-3 bg-light rounded border-start border-4 border-warning mt-3 small text-muted">
+                <strong><i class="fas fa-lightbulb text-warning me-1"></i> Course Attrition Insight:</strong>
+                <p class="mb-0 mt-1">
+                    Program selection impacts graduation likelihood. Engineering courses (Informatics Engineering) exhibit higher dropout counts, while professional health qualifications (Nursing) present higher retention.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- 7. Correlation Heatmap -->
+    <div class="col-12 col-lg-7">
+        <div class="glass-card p-4 shadow-sm h-100 anim-delay-2">
+            <h5 class="fw-bold mb-3"><i class="fas fa-grid text-secondary me-2"></i> Feature Correlation Matrix</h5>
+            <div id="chart-heatmap" class="chart-container" style="min-height: 350px;"></div>
+            <div class="p-3 bg-light rounded border-start border-4 border-primary mt-3 small text-muted">
+                <strong><i class="fas fa-lightbulb text-warning me-1"></i> Correlation Insight:</strong>
+                <p class="mb-0 mt-1">
+                    Academic performance parameters (1st and 2nd semester approved credits and grades) exhibit the highest positive correlation weights. Debtor status is negatively correlated with approved credits, linking financial strain with academic struggles.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 8. Box Plots (Age Outliers) -->
+    <div class="col-12 col-lg-5">
+        <div class="glass-card p-4 shadow-sm h-100 anim-delay-3">
+            <h5 class="fw-bold mb-3"><i class="fas fa-chart-line text-danger me-2"></i> Age Box Plots Outlier Diagnostic</h5>
+            <div id="chart-box" class="chart-container" style="min-height: 350px;"></div>
+            <div class="p-3 bg-light rounded border-start border-4 border-danger mt-3 small text-muted">
+                <strong><i class="fas fa-lightbulb text-warning me-1"></i> Outliers Diagnostic Insight:</strong>
+                <p class="mb-0 mt-1">
+                    The box plot shows significant outliers in the Graduate and Enrolled categories above age 30, whereas the Dropout category features a wider interquartile range extending into older ages, showing age is a broad risk variable.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- 9. Approved Credits Histogram -->
+    <div class="col-12">
+        <div class="glass-card p-4 shadow-sm anim-delay-3">
+            <h5 class="fw-bold mb-3"><i class="fas fa-calculator text-success me-2"></i> 1st Semester Completed Credits Histograms</h5>
+            <div id="chart-credits" class="chart-container" style="min-height: 350px;"></div>
+            <div class="p-3 bg-light rounded border-start border-4 border-success mt-3 small text-muted">
+                <strong><i class="fas fa-lightbulb text-warning me-1"></i> Credits Completed Histogram Insight:</strong>
+                <p class="mb-0 mt-1">
+                    Graduates cluster heavily around 6-8 completed units. Students completing 0 units in the first semester are almost entirely comprised of dropouts. Completing fewer than 3-4 credits signals a critical need for academic recovery.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Render the charts parsed from JSON payloads
+    const chartConfigs = {
+        'chart-target': {{ charts.target | safe }},
+        'chart-gender': {{ charts.gender | safe }},
+        'chart-scholarship': {{ charts.scholarship | safe }},
+        'chart-admission': {{ charts.admission | safe }},
+        'chart-age': {{ charts.age | safe }},
+        'chart-course': {{ charts.course | safe }},
+        'chart-heatmap': {{ charts.heatmap | safe }},
+        'chart-box': {{ charts.box | safe }},
+        'chart-credits': {{ charts.credits | safe }}
+    };
+    
+    // Apply styling layouts and render
+    Object.keys(chartConfigs).forEach(id => {
+        const targetDiv = document.getElementById(id);
+        if (targetDiv && chartConfigs[id]) {
+            const chartData = chartConfigs[id].data;
+            const chartLayout = chartConfigs[id].layout;
+            
+            // Clean backgrounds
+            chartLayout.paper_bgcolor = 'rgba(0,0,0,0)';
+            chartLayout.plot_bgcolor = 'rgba(0,0,0,0)';
+            chartLayout.font = { family: 'Inter, sans-serif', color: '#64748b' };
+            chartLayout.margin = { l: 40, r: 20, t: 40, b: 60 };
+            chartLayout.height = 320;
+            
+            targetDiv.innerHTML = ''; // Clear placeholder
+            Plotly.newPlot(targetDiv, chartData, chartLayout, { responsive: true, displayModeBar: false });
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,364 @@
+{% extends "base.html" %}
+
+{% block title %}Dataset Overview - EduShield{% endblock %}
+
+{% block header_title %}Dataset Overview & Exploratory Diagnostics{% endblock %}
+{% block header_description %}Explore the structural dimensions, features metadata, missing value metrics, target distribution, and statistical summaries of the student retention cohort.{% endblock %}
+
+{% block content %}
+<div class="fade-in-section">
+
+    <!-- Dataset Summary Metadata Cards -->
+    <div class="row g-4 mb-4">
+        <!-- Records -->
+        <div class="col-6 col-lg-3">
+            <div class="glass-card kpi-card shadow-sm anim-delay-1">
+                <div class="kpi-details">
+                    <span class="kpi-value">{{ metadata.total_records }}</span>
+                    <span class="kpi-label">Total Records</span>
+                </div>
+                <div class="kpi-icon-container kpi-blue">
+                    <i class="fas fa-file-csv"></i>
+                </div>
+            </div>
+        </div>
+        <!-- Features -->
+        <div class="col-6 col-lg-3">
+            <div class="glass-card kpi-card shadow-sm anim-delay-2">
+                <div class="kpi-details">
+                    <span class="kpi-value">{{ metadata.total_features }}</span>
+                    <span class="kpi-label">Total Features</span>
+                </div>
+                <div class="kpi-icon-container kpi-orange">
+                    <i class="fas fa-list-ol"></i>
+                </div>
+            </div>
+        </div>
+        <!-- Dataset Shape -->
+        <div class="col-6 col-lg-3">
+            <div class="glass-card kpi-card shadow-sm anim-delay-3">
+                <div class="kpi-details">
+                    <span class="kpi-value" style="font-size: 1.45rem; line-height: 1.8rem; font-weight: 800;">4424 x 35</span>
+                    <span class="kpi-label">Dataset Shape (RxC)</span>
+                </div>
+                <div class="kpi-icon-container kpi-purple">
+                    <i class="fas fa-table-cells"></i>
+                </div>
+            </div>
+        </div>
+        <!-- Missing/Duplicates -->
+        <div class="col-6 col-lg-3">
+            <div class="glass-card kpi-card shadow-sm anim-delay-4">
+                <div class="kpi-details">
+                    <span class="kpi-value">0 / 0</span>
+                    <span class="kpi-label">Missing / Duplicates</span>
+                </div>
+                <div class="kpi-icon-container kpi-green">
+                    <i class="fas fa-check-double"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Distribution & Data Types Section -->
+    <div class="row g-4 mb-4">
+        <!-- Target Class Distribution -->
+        <div class="col-12 col-lg-7">
+            <div class="glass-card p-4 shadow-sm h-100 anim-delay-2">
+                <h5 class="card-title"><i class="fas fa-chart-donut text-purple me-2"></i> Target Class Distribution</h5>
+                <div class="row align-items-center mt-3">
+                    <div class="col-12 col-sm-5 d-flex justify-content-center">
+                        <div id="target-donut-chart" style="width: 100%; min-height: 180px;"></div>
+                    </div>
+                    <div class="col-12 col-sm-7">
+                        <div class="p-2">
+                            <div class="d-flex align-items-center justify-content-between mb-2 pb-1 border-bottom">
+                                <span class="fw-bold small text-muted"><i class="fas fa-circle text-success me-1"></i> Graduate</span>
+                                <span class="fw-bold text-dark">2,209 students (49.9%)</span>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mb-2 pb-1 border-bottom">
+                                <span class="fw-bold small text-muted"><i class="fas fa-circle text-danger me-1"></i> Dropout</span>
+                                <span class="fw-bold text-dark">1,421 students (32.1%)</span>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="fw-bold small text-muted"><i class="fas fa-circle text-info me-1"></i> Enrolled</span>
+                                <span class="fw-bold text-dark">794 students (18.0%)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Data Types panel -->
+        <div class="col-12 col-lg-5">
+            <div class="glass-card p-4 shadow-sm h-100 anim-delay-3">
+                <h5 class="card-title"><i class="fas fa-circle-info text-secondary me-2"></i> Attribute Data Types</h5>
+                <div class="mt-3" style="max-height: 180px; overflow-y: auto; padding-right: 5px;">
+                    <div class="d-flex justify-content-between small py-1 border-bottom">
+                        <span class="text-muted">Marital status</span>
+                        <span class="badge bg-secondary">int64</span>
+                    </div>
+                    <div class="d-flex justify-content-between small py-1 border-bottom">
+                        <span class="text-muted">Application mode</span>
+                        <span class="badge bg-secondary">int64</span>
+                    </div>
+                    <div class="d-flex justify-content-between small py-1 border-bottom">
+                        <span class="text-muted">Course</span>
+                        <span class="badge bg-secondary">int64</span>
+                    </div>
+                    <div class="d-flex justify-content-between small py-1 border-bottom">
+                        <span class="text-muted">Admission grade</span>
+                        <span class="badge bg-info">float64</span>
+                    </div>
+                    <div class="d-flex justify-content-between small py-1 border-bottom">
+                        <span class="text-muted">Tuition fees up to date</span>
+                        <span class="badge bg-secondary">int64 (binary)</span>
+                    </div>
+                    <div class="d-flex justify-content-between small py-1 border-bottom">
+                        <span class="text-muted">Age at enrollment</span>
+                        <span class="badge bg-secondary">int64</span>
+                    </div>
+                    <div class="d-flex justify-content-between small py-1 border-bottom">
+                        <span class="text-muted">Curricular units 1st sem (approved)</span>
+                        <span class="badge bg-secondary">int64</span>
+                    </div>
+                    <div class="d-flex justify-content-between small py-1 border-bottom">
+                        <span class="text-muted">Curricular units 1st sem (grade)</span>
+                        <span class="badge bg-info">float64</span>
+                    </div>
+                    <div class="d-flex justify-content-between small py-1">
+                        <span class="text-muted">Target (Class label)</span>
+                        <span class="badge bg-warning">object (string)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistical Summary Table -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="glass-card p-4 shadow-sm anim-delay-3">
+                <h5 class="card-title mb-3"><i class="fas fa-calculator text-primary me-2"></i> Statistical Summary (Key Numeric Features)</h5>
+                <div class="table-responsive">
+                    <table class="custom-table" style="font-size: 0.9rem;">
+                        <thead>
+                            <tr>
+                                <th>Feature Variable Name</th>
+                                <th>Mean</th>
+                                <th>Std Dev</th>
+                                <th>Min</th>
+                                <th>25%</th>
+                                <th>50% (Median)</th>
+                                <th>75%</th>
+                                <th>Max</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="fw-bold">Age at enrollment</td>
+                                <td>23.27</td>
+                                <td>7.59</td>
+                                <td>17.0</td>
+                                <td>19.0</td>
+                                <td>20.0</td>
+                                <td>25.0</td>
+                                <td>70.0</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Admission grade</td>
+                                <td>126.98</td>
+                                <td>14.48</td>
+                                <td>95.0</td>
+                                <td>117.9</td>
+                                <td>126.1</td>
+                                <td>134.8</td>
+                                <td>190.0</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Curricular units 1st sem (approved)</td>
+                                <td>4.71</td>
+                                <td>3.09</td>
+                                <td>0.0</td>
+                                <td>3.0</td>
+                                <td>5.0</td>
+                                <td>6.0</td>
+                                <td>26.0</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Curricular units 1st sem (grade)</td>
+                                <td>10.64</td>
+                                <td>4.84</td>
+                                <td>0.0</td>
+                                <td>11.0</td>
+                                <td>12.28</td>
+                                <td>13.4</td>
+                                <td>18.88</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Curricular units 2nd sem (approved)</td>
+                                <td>4.44</td>
+                                <td>3.01</td>
+                                <td>0.0</td>
+                                <td>2.0</td>
+                                <td>5.0</td>
+                                <td>6.0</td>
+                                <td>20.0</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold">Curricular units 2nd sem (grade)</td>
+                                <td>10.23</td>
+                                <td>5.21</td>
+                                <td>0.0</td>
+                                <td>10.75</td>
+                                <td>12.2</td>
+                                <td>13.33</td>
+                                <td>18.57</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dataset Dictionary (Key Features) -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="glass-card p-4 shadow-sm anim-delay-3">
+                <h5 class="card-title"><i class="fas fa-book-open text-orange me-2"></i> Key Features Dictionary</h5>
+                <div class="table-responsive">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">Feature Column Name</th>
+                                <th style="width: 20%">Data Type</th>
+                                <th style="width: 55%">Feature Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for col in columns %}
+                            <tr>
+                                <td class="fw-bold">{{ col.name }}</td>
+                                <td>
+                                    {% if col.type == 'Categorical' %}
+                                        <span class="badge-custom badge-info"><i class="fas fa-tags me-1"></i>{{ col.type }}</span>
+                                    {% elif col.type == 'Numerical' %}
+                                        <span class="badge-custom badge-success"><i class="fas fa-calculator me-1"></i>{{ col.type }}</span>
+                                    {% else %}
+                                        <span class="badge-custom badge-warning"><i class="fas fa-toggle-on me-1"></i>{{ col.type }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-muted">{{ col.desc }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Table -->
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="glass-card p-4 shadow-sm anim-delay-4">
+                <h5 class="card-title"><i class="fas fa-table text-secondary me-2"></i> Raw Dataset Sample Preview (First 5 Records)</h5>
+                <div class="table-responsive">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Marital Status</th>
+                                <th>Enrolled Course</th>
+                                <th>Admission Grade</th>
+                                <th>Is Debtor?</th>
+                                <th>Tuition Paid?</th>
+                                <th>Gender</th>
+                                <th>Age</th>
+                                <th>Sem1 Approved</th>
+                                <th>Sem1 Grade</th>
+                                <th>Sem2 Approved</th>
+                                <th>Sem2 Grade</th>
+                                <th>Target (Class)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in preview %}
+                            <tr>
+                                <td class="fw-bold">#{{ row.id }}</td>
+                                <td>{{ row.marital }}</td>
+                                <td>{{ row.course }}</td>
+                                <td>{{ row.grade }}</td>
+                                <td>
+                                    {% if row.debtor == 'Yes' %}
+                                        <span class="badge-custom badge-danger">Yes</span>
+                                    {% else %}
+                                        <span class="badge-custom badge-success">No</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if row.tuition_ok == 'Yes' %}
+                                        <span class="badge-custom badge-success">Up to Date</span>
+                                    {% else %}
+                                        <span class="badge-custom badge-danger">Overdue</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ row.gender }}</td>
+                                <td>{{ row.age }}</td>
+                                <td>{{ row.sem1_approved }}</td>
+                                <td>{{ row.sem1_grade }}</td>
+                                <td>{{ row.sem2_approved }}</td>
+                                <td>{{ row.sem2_grade }}</td>
+                                <td>
+                                    {% if row.target == 'Dropout' %}
+                                        <span class="badge-custom badge-danger"><i class="fas fa-circle-exclamation me-1"></i>Dropout</span>
+                                    {% elif row.target == 'Graduate' %}
+                                        <span class="badge-custom badge-success"><i class="fas fa-circle-check me-1"></i>Graduate</span>
+                                    {% else %}
+                                        <span class="badge-custom badge-info"><i class="fas fa-circle-play me-1"></i>Enrolled</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Render target distribution pie chart
+    const donutDiv = document.getElementById('target-donut-chart');
+    if (donutDiv) {
+        const data = [{
+            values: [2209, 1421, 794],
+            labels: ['Graduate', 'Dropout', 'Enrolled'],
+            type: 'pie',
+            hole: 0.5,
+            marker: {
+                colors: ['#10b981', '#dc2626', '#0ea5e9']
+            },
+            textinfo: 'percent',
+            hoverinfo: 'label+value+percent'
+        }];
+        const layout = {
+            showlegend: false,
+            margin: { l: 10, r: 10, t: 10, b: 10 },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { family: 'Inter, sans-serif', color: '#64748b' },
+            height: 180
+        };
+        Plotly.newPlot(donutDiv, data, layout, { responsive: true, displayModeBar: false });
+    }
+});
+</script>
+{% endblock %}
